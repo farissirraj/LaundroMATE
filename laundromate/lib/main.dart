@@ -1,7 +1,6 @@
 // ignore_for_file: unnecessary_new, prefer_const_constructors, avoid_unnecessary_containers
-
 import 'package:flutter/material.dart';
-//import 'package:flutter_animated_button/flutter_animated_button.dart';
+import 'settings.dart';
 
 void main() {
   runApp(const MyApp());
@@ -67,29 +66,32 @@ class HomePage extends StatelessWidget {
 }
 
 class Book extends StatelessWidget {
-  const Book({Key? key}) : super(key: key);
+  //const Book({Key? key}) : super(key: key);
+
+  List<String> items = <String>['1', '2'];
+  String? electedItem = '1';
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('B O O K'),
-        backgroundColor: Color.fromRGBO(0, 74, 173, 2),
+        title: const Text('B O O K'),
+        backgroundColor: const Color.fromRGBO(0, 74, 173, 2),
       ),
     );
   }
 }
 
-class Settings extends StatelessWidget {
-  const Settings({Key? key}) : super(key: key);
 
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: Text('S E T T I N G S'),
-        backgroundColor: Color.fromRGBO(0, 74, 173, 2),
-      ),
-    );
-  }
-}
+
+/*
+child: Text(
+                  'S A V E  |  U P D A T E',
+                  style: TextStyle(
+                      fontSize: 20, color: Color.fromARGB(255, 255, 255, 255)),
+                ),
+                style: ElevatedButton.styleFrom(
+                  primary: Colors.blue,
+                ),
+                onPressed: null,
+                */
