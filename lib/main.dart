@@ -1,6 +1,7 @@
 // ignore_for_file: unnecessary_new, prefer_const_constructors, avoid_unnecessary_containers
 import 'package:flutter/material.dart';
 import 'settings.dart';
+import 'book.dart';
 
 void main() {
   runApp(const MyApp());
@@ -65,22 +66,7 @@ class HomePage extends StatelessWidget {
   }
 }
 
-class Book extends StatelessWidget {
-  //const Book({Key? key}) : super(key: key);
 
-  List<String> items = <String>['1', '2'];
-  String? electedItem = '1';
-
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: const Text('B O O K'),
-        backgroundColor: const Color.fromRGBO(0, 74, 173, 2),
-      ),
-    );
-  }
-}
 
 
 
