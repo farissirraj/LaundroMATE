@@ -34,7 +34,7 @@ class HomePage extends StatelessWidget {
             height: 50.0,
             child: ElevatedButton(
                 child: Text(
-                  'bB O O K',
+                  'B O O K',
                   style: TextStyle(
                       fontSize: 20, color: Color.fromARGB(255, 0, 0, 0)),
                 ),

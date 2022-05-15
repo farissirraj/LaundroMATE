@@ -35,7 +35,7 @@ class Settings extends StatelessWidget {
           SizedBox(
             width: 350.0,
             child: FloatingActionButton.extended(
-              onPressed: () {},
+              onPressed: () => Navigator.pop(context, 'Cancel'),
               label: Text('S A V E'),
               icon: Icon(Icons.save),
               backgroundColor: Color.fromRGBO(0, 74, 173, 2),
