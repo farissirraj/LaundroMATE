@@ -36,8 +36,9 @@ dependencies:
   cupertino_icons: ^1.0.2
 
   #calendar
-  syncfusion_flutter_calendar: ^19.1.59
-
+  syncfusion_flutter_calendar: ^19.1.69
+  http: ^0.13.3
+  
   #handle dates
   intl: ^0.17.0
   
