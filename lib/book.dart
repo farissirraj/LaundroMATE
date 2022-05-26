@@ -1,103 +1,154 @@
-import 'package:flutter/material.dart';
-import 'package:syncfusion_flutter_calendar/calendar.dart';
+// ignore_for_file: empty_catches
 
 import 'dart:math';
-import 'package:http/http.dart';
-import 'dart:convert' as convert;
-import 'package:http/http.dart' as http;
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_core/firebase_core.dart';
+import 'package:flutter/material.dart';
+import 'package:flutter/scheduler.dart';
+import 'package:syncfusion_flutter_calendar/calendar.dart';
+import 'package:intl/intl.dart';
 
-/*
-class Book extends StatelessWidget {
-  // ignore: prefer_const_constructors_in_immutables3
-  const Book({Key? key}) : super(key: key);
+class LoadDataFromFireBase extends StatelessWidget {
+  const LoadDataFromFireBase({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    // ignore: dead_code
-    return Scaffold(
-      appBar: AppBar(
-        title: const Text('B O O K I N G S'),
-        backgroundColor: const Color.fromRGBO(0, 74, 173, 2),
-      ),
-      body: Center(
-        child: SfCalendar(
-          view: CalendarView.month,
-          initialSelectedDate: DateTime.now(),
-        ),
-      ),
+    return const MaterialApp(
+      debugShowCheckedModeBanner: false,
+      title: 'FireBase',
+      home: LoadDataFromFireStore(),
     );
   }
 }
-*/
 
-class GoogleSheetData extends StatefulWidget {
-  const GoogleSheetData({Key? key}) : super(key: key);
+class LoadDataFromFireStore extends StatefulWidget {
+  const LoadDataFromFireStore({Key? key}) : super(key: key);
 
   @override
-  LoadDataFromGoogleSheetState createState() => LoadDataFromGoogleSheetState();
+  LoadDataFromFireStoreState createState() => LoadDataFromFireStoreState();
 }
 
-class LoadDataFromGoogleSheetState extends State<GoogleSheetData> {
-  MeetingDataSource? events;
+class LoadDataFromFireStoreState extends State<LoadDataFromFireStore> {
   final List<Color> _colorCollection = <Color>[];
+  MeetingDataSource? events;
+  MeetingDataSource? events1;
+  final List<String> options = <String>['Add', 'Delete', 'Update'];
+  final databaseReference = FirebaseFirestore.instance;
 
   @override
   void initState() {
     _initializeEventColor();
+    getDataFromFireStore().then((results) {
+      SchedulerBinding.instance!.addPostFrameCallback((timeStamp) {
+        setState(() {});
+      });
+    });
     super.initState();
   }
 
-  _goBack(BuildContext context) {
-    Navigator.pop(context);
+  Future<void> getDataFromFireStore() async {
+    final now = DateTime.now().toUtc();
+    var snapShotsValue = await databaseReference
+        .collection("appointments")
+        .doc("appointments")
+        .collection('all')
+        .get();
+
+    final Random random = Random();
+    List<Meeting> list = snapShotsValue.docs
+        .map((e) => Meeting(
+            eventName: e.data()['description'],
+            from: DateFormat('dd/MM/yyyy HH:mm:ss').parse(e.data()['date']),
+            to: DateFormat('dd/MM/yyyy HH:mm:ss').parse(e.data()['date']),
+            background: _colorCollection[random.nextInt(9)],
+            isAllDay: false))
+        .toList();
+
+    setState(() {
+      events = MeetingDataSource(list);
+    });
   }
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      debugShowCheckedModeBanner: false,
-      home: Scaffold(
-          appBar: AppBar(
-            leading: IconButton(
-              icon: const Icon(Icons.arrow_back_ios),
-              iconSize: 20.0,
-              onPressed: () {
-                _goBack(context);
-              },
-            ),
-            title: const Text('B O O K I N G S'),
+    return Scaffold(
+        appBar: AppBar(
             backgroundColor: const Color.fromRGBO(0, 74, 173, 2),
-          ),
-          body: SafeArea(
-              // ignore: avoid_unnecessary_containers
-              child: Container(
-            child: FutureBuilder(
-              future: getDataFromGoogleSheet(),
-              builder: (BuildContext context, AsyncSnapshot snapshot) {
-                if (snapshot.data != null) {
-                  return SafeArea(
-                      // ignore: avoid_unnecessary_containers
-                      child: Container(
-                    child: SfCalendar(
-                      view: CalendarView.month,
-                      monthViewSettings:
-                          const MonthViewSettings(showAgenda: true),
-                      dataSource: MeetingDataSource(snapshot.data),
-                      initialDisplayDate: snapshot.data[0].from,
-                    ),
-                  ));
-                } else {
-                  // ignore: avoid_unnecessary_containers
-                  return Container(
-                    child: const Center(
-                      child: Text('Loading.....'),
-                    ),
-                  );
+            title: Container(
+              alignment: Alignment.center,
+              padding: const EdgeInsets.symmetric(vertical: 10),
+              child: const Text(
+                'B O O K I N G',
+                style: TextStyle(
+                  fontSize: 25,
+                  color: Color.fromARGB(255, 255, 255, 255),
+                ),
+              ),
+            ),
+            leading: PopupMenuButton<String>(
+              icon: const Icon(
+                Icons.settings,
+                color: Colors.black,
+              ),
+              itemBuilder: (BuildContext context) =>
+                  options.map((String choice) {
+                return PopupMenuItem<String>(
+                  value: choice,
+                  child: Text(choice),
+                );
+              }).toList(),
+              onSelected: (String value) {
+                if (value == 'Add') {
+                  final now = DateTime.now().toUtc();
+                  databaseReference
+                      .collection("appointments")
+                      .doc("appointments")
+                      .collection('all')
+                      .doc(
+                          'month${now.month}day${now.day}:${now.hour}:${now.minute}:${now.second}')
+                      .set({
+                    'Subject': 'Mastering Flutter',
+                    'StartTime': '10/06/2022 10:30',
+                    'EndTime': '10/06/2022 10:00'
+                  });
+                } else if (value == "Delete") {
+                  try {
+                    databaseReference
+                        .collection("appointments")
+                        .doc('1')
+                        .delete();
+                  } catch (e) {}
+                } else if (value == "Update") {
+                  try {
+                    databaseReference
+                        .collection("appointments")
+                        .doc('1')
+                        .update({'Subject': 'Meeting'});
+                  } catch (e) {}
                 }
               },
-            ),
-          ))),
-    );
+            )),
+        body: SfCalendar(
+          view: CalendarView.month,
+          onTap: calendarTapped,
+          allowedViews: const [
+            CalendarView.week,
+            CalendarView.schedule,
+            CalendarView.month,
+          ],
+          timeSlotViewSettings: const TimeSlotViewSettings(
+              startHour: 9,
+              endHour: 21,
+              nonWorkingDays: <int>[DateTime.friday, DateTime.monday]),
+          initialDisplayDate: DateTime.now(),
+          dataSource: events,
+          monthViewSettings: const MonthViewSettings(
+            showAgenda: true,
+          ),
+        ));
   }
+
+  void calendarTapped(CalendarTapDetails calendarTapDetails) {}
 
   void _initializeEventColor() {
     _colorCollection.add(const Color(0xFF0F8644));
@@ -110,30 +161,6 @@ class LoadDataFromGoogleSheetState extends State<GoogleSheetData> {
     _colorCollection.add(const Color(0xFFE47C73));
     _colorCollection.add(const Color(0xFF636363));
     _colorCollection.add(const Color(0xFF0A8043));
-  }
-
-  Future<List<Meeting>> getDataFromGoogleSheet() async {
-    Response data = await http.get(
-      Uri.parse(
-          "https://script.google.com/macros/s/AKfycbwG-W8x3ojt3-h5F-2IsmfdfTTdGo-bJiYF9gtBfC80KWNc7Qfv3DlApShRwYanHZia4A/exec"),
-    );
-    dynamic jsonAppData = convert.jsonDecode(data.body);
-    final List<Meeting> appointmentData = [];
-    final Random random = Random();
-    for (dynamic data in jsonAppData) {
-      Meeting meetingData = Meeting(
-        eventName: data['subject'],
-        from: _convertDateFromString(data['starttime']),
-        to: _convertDateFromString(data['endtime']),
-        background: _colorCollection[random.nextInt(9)],
-      );
-      appointmentData.add(meetingData);
-    }
-    return appointmentData;
-  }
-
-  DateTime _convertDateFromString(String date) {
-    return DateTime.parse(date);
   }
 }
 
@@ -153,6 +180,11 @@ class MeetingDataSource extends CalendarDataSource {
   }
 
   @override
+  bool isAllDay(int index) {
+    return appointments![index].isAllDay;
+  }
+
+  @override
   String getSubject(int index) {
     return appointments![index].eventName;
   }
@@ -164,16 +196,16 @@ class MeetingDataSource extends CalendarDataSource {
 }
 
 class Meeting {
+  String eventName;
+  DateTime from;
+  DateTime to;
+  Color background;
+  bool isAllDay;
+
   Meeting(
-      {this.eventName = '',
+      {required this.eventName,
       required this.from,
       required this.to,
-      this.background,
-      this.isAllDay = false});
-
-  String? eventName;
-  DateTime? from;
-  DateTime? to;
-  Color? background;
-  bool? isAllDay;
+      required this.background,
+      required this.isAllDay});
 }

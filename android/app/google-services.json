@@ -1,0 +1,46 @@
+{
+  "project_info": {
+    "project_number": "596845297819",
+    "project_id": "laundromate-2e111",
+    "storage_bucket": "laundromate-2e111.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:596845297819:android:73649de62b31323d0a063e",
+        "android_client_info": {
+          "package_name": "com.example.laundromate"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "596845297819-0aght9ojjvannbao3g5s0t3tk2hmrfp1.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAUF5vVt8-X2oypuu_h5SWcE7WRs15Y1ig"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "596845297819-0aght9ojjvannbao3g5s0t3tk2hmrfp1.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "596845297819-qlp7mf8aoglmpocoqoa4h94ae011njog.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.example.laundromate"
+              }
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
