@@ -35,7 +35,24 @@ class Settings extends StatelessWidget {
           SizedBox(
             width: 350.0,
             child: FloatingActionButton.extended(
-              onPressed: () {},
+              onPressed: () {
+                showDialog(
+                  context: context,
+                  builder: (context) => AlertDialog(
+                      title: Text(''),
+                      content: Text(
+                        'S A V E D !',
+                        textAlign: TextAlign.center,
+                        style: TextStyle(fontSize: 20),
+                      ),
+                      actions: [
+                        TextButton(
+                          child: Text('OK'),
+                          onPressed: () => Navigator.pop(context),
+                        ),
+                      ]),
+                );
+              },
               label: Text('S A V E'),
               icon: Icon(Icons.save),
               backgroundColor: Color.fromRGBO(0, 74, 173, 2),

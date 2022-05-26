@@ -10,13 +10,21 @@ import 'package:intl/intl.dart';
 
 class LoadDataFromFireBase extends StatelessWidget {
   const LoadDataFromFireBase({Key? key}) : super(key: key);
-
+  /*
   @override
   Widget build(BuildContext context) {
     return const MaterialApp(
       debugShowCheckedModeBanner: false,
       title: 'FireBase',
       home: LoadDataFromFireStore(),
+    );
+  }
+  */
+
+  @override
+  Widget build(BuildContext context) {
+    return const Scaffold(
+      body: LoadDataFromFireStore(),
     );
   }
 }
@@ -34,6 +42,8 @@ class LoadDataFromFireStoreState extends State<LoadDataFromFireStore> {
   MeetingDataSource? events1;
   final List<String> options = <String>['Add', 'Delete', 'Update'];
   final databaseReference = FirebaseFirestore.instance;
+
+  final CalendarController _controller = CalendarController();
 
   @override
   void initState() {
@@ -57,11 +67,12 @@ class LoadDataFromFireStoreState extends State<LoadDataFromFireStore> {
     final Random random = Random();
     List<Meeting> list = snapShotsValue.docs
         .map((e) => Meeting(
-            eventName: e.data()['description'],
-            from: DateFormat('dd/MM/yyyy HH:mm:ss').parse(e.data()['date']),
-            to: DateFormat('dd/MM/yyyy HH:mm:ss').parse(e.data()['date']),
-            background: _colorCollection[random.nextInt(9)],
-            isAllDay: false))
+              eventName: e.data()['description'],
+              from: DateFormat('dd/MM/yyyy HH:mm:ss').parse(e.data()['date']),
+              to: DateFormat('dd/MM/yyyy HH:mm:ss').parse(e.data()['date']),
+              background:
+                  _colorCollection[random.nextInt(9)], /*isAllDay: false*/
+            ))
         .toList();
 
     setState(() {
@@ -69,86 +80,62 @@ class LoadDataFromFireStoreState extends State<LoadDataFromFireStore> {
     });
   }
 
+  _goBack(BuildContext context) {
+    Navigator.pop(context, true);
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        appBar: AppBar(
-            backgroundColor: const Color.fromRGBO(0, 74, 173, 2),
-            title: Container(
-              alignment: Alignment.center,
-              padding: const EdgeInsets.symmetric(vertical: 10),
-              child: const Text(
-                'B O O K I N G',
-                style: TextStyle(
-                  fontSize: 25,
-                  color: Color.fromARGB(255, 255, 255, 255),
-                ),
-              ),
-            ),
-            leading: PopupMenuButton<String>(
-              icon: const Icon(
-                Icons.settings,
-                color: Colors.black,
-              ),
-              itemBuilder: (BuildContext context) =>
-                  options.map((String choice) {
-                return PopupMenuItem<String>(
-                  value: choice,
-                  child: Text(choice),
-                );
-              }).toList(),
-              onSelected: (String value) {
-                if (value == 'Add') {
-                  final now = DateTime.now().toUtc();
-                  databaseReference
-                      .collection("appointments")
-                      .doc("appointments")
-                      .collection('all')
-                      .doc(
-                          'month${now.month}day${now.day}:${now.hour}:${now.minute}:${now.second}')
-                      .set({
-                    'Subject': 'Mastering Flutter',
-                    'StartTime': '10/06/2022 10:30',
-                    'EndTime': '10/06/2022 10:00'
-                  });
-                } else if (value == "Delete") {
-                  try {
-                    databaseReference
-                        .collection("appointments")
-                        .doc('1')
-                        .delete();
-                  } catch (e) {}
-                } else if (value == "Update") {
-                  try {
-                    databaseReference
-                        .collection("appointments")
-                        .doc('1')
-                        .update({'Subject': 'Meeting'});
-                  } catch (e) {}
-                }
-              },
-            )),
-        body: SfCalendar(
-          view: CalendarView.month,
-          onTap: calendarTapped,
-          allowedViews: const [
-            CalendarView.week,
-            CalendarView.schedule,
-            CalendarView.month,
-          ],
-          timeSlotViewSettings: const TimeSlotViewSettings(
-              startHour: 9,
-              endHour: 21,
-              nonWorkingDays: <int>[DateTime.friday, DateTime.monday]),
-          initialDisplayDate: DateTime.now(),
-          dataSource: events,
-          monthViewSettings: const MonthViewSettings(
-            showAgenda: true,
-          ),
-        ));
+      appBar: AppBar(
+        leading: IconButton(
+          icon: const Icon(Icons.arrow_back_ios),
+          iconSize: 20.0,
+          onPressed: () {
+            _goBack(context);
+          },
+        ),
+        title: const Text('B O O K I N G'),
+        backgroundColor: const Color.fromRGBO(0, 74, 173, 2),
+      ),
+      body: SfCalendar(
+        view: CalendarView.month,
+        allowedViews: const [
+          CalendarView.week,
+          CalendarView.day,
+          CalendarView.month,
+        ],
+        viewNavigationMode: ViewNavigationMode.snap,
+        showDatePickerButton: true,
+        showNavigationArrow: true,
+        allowViewNavigation: true,
+        headerStyle: const CalendarHeaderStyle(textAlign: TextAlign.center),
+        viewHeaderStyle: const ViewHeaderStyle(
+            backgroundColor: Color.fromARGB(253, 255, 255, 255)),
+        controller: _controller,
+        initialDisplayDate: DateTime.now(),
+        onTap: calendarTapped,
+        monthViewSettings: const MonthViewSettings(
+            navigationDirection: MonthNavigationDirection.vertical),
+      ),
+      floatingActionButton: const FloatingActionButton(
+        backgroundColor: Color.fromRGBO(0, 74, 173, 2),
+        onPressed: null,
+        child: Icon(Icons.add),
+      ),
+    );
   }
 
-  void calendarTapped(CalendarTapDetails calendarTapDetails) {}
+  void calendarTapped(CalendarTapDetails calendarTapDetails) {
+    if (_controller.view == CalendarView.month &&
+        calendarTapDetails.targetElement == CalendarElement.calendarCell) {
+      _controller.view = CalendarView.day;
+    } else if ((_controller.view == CalendarView.week ||
+            _controller.view == CalendarView.workWeek) &&
+        calendarTapDetails.targetElement == CalendarElement.viewHeader) {
+      _controller.view = CalendarView.day;
+    }
+  }
 
   void _initializeEventColor() {
     _colorCollection.add(const Color(0xFF0F8644));
@@ -200,12 +187,13 @@ class Meeting {
   DateTime from;
   DateTime to;
   Color background;
-  bool isAllDay;
+  /*bool isAllDay;*/
 
-  Meeting(
-      {required this.eventName,
-      required this.from,
-      required this.to,
-      required this.background,
-      required this.isAllDay});
+  Meeting({
+    required this.eventName,
+    required this.from,
+    required this.to,
+    required this.background,
+    /*required this.isAllDay*/
+  });
 }
