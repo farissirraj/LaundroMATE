@@ -23,7 +23,20 @@ void main() async {
     measurementId: 'G-TFF30NT03C',
   ));
   */
+  //android
+  /*
+  await Firebase.initializeApp(
+      options: const FirebaseOptions(
+    apiKey: 'AIzaSyAUF5vVt8-X2oypuu_h5SWcE7WRs15Y1ig',
+    appId: '1:596845297819:android:73649de62b31323d0a063e',
+    messagingSenderId: '596845297819',
+    projectId: 'laundromate-2e111',
+    storageBucket: 'laundromate-2e111.appspot.com',
+  )); 
 
+  */
+
+  //ios
   await Firebase.initializeApp(
       options: const FirebaseOptions(
     apiKey: 'AIzaSyBfIkm32b_104BnWzf5UrN1y34ZJ5wRcBE',
