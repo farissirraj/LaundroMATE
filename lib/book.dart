@@ -120,10 +120,16 @@ class LoadDataFromFireStoreState extends State<LoadDataFromFireStore> {
         monthViewSettings: const MonthViewSettings(
             navigationDirection: MonthNavigationDirection.vertical),
       ),
-      floatingActionButton: const FloatingActionButton(
-        backgroundColor: Color.fromRGBO(0, 74, 173, 2),
-        onPressed: null,
-        child: Icon(Icons.add),
+      floatingActionButton: FloatingActionButton(
+        backgroundColor: const Color.fromRGBO(0, 74, 173, 2),
+        onPressed: () {
+          databaseReference.collection("Appt").doc("2").set({
+            'Subject': 'Mastering Flutter',
+            'StartTime': '07/04/2020 08:00:00',
+            'EndTime': '07/04/2020 09:00:00'
+          });
+        },
+        child: const Icon(Icons.add),
       ),
     );
   }
