@@ -84,6 +84,8 @@ class LoadDataFromFireStoreState extends State<LoadDataFromFireStore> {
     Navigator.pop(context, true);
   }
 
+  void add() {}
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(

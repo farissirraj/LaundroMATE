@@ -24,7 +24,7 @@ void main() async {
   ));
   */
   //android
-  /*
+
   await Firebase.initializeApp(
       options: const FirebaseOptions(
     apiKey: 'AIzaSyAUF5vVt8-X2oypuu_h5SWcE7WRs15Y1ig',
@@ -32,11 +32,10 @@ void main() async {
     messagingSenderId: '596845297819',
     projectId: 'laundromate-2e111',
     storageBucket: 'laundromate-2e111.appspot.com',
-  )); 
-
-  */
+  ));
 
   //ios
+  /*
   await Firebase.initializeApp(
       options: const FirebaseOptions(
     apiKey: 'AIzaSyBfIkm32b_104BnWzf5UrN1y34ZJ5wRcBE',
@@ -48,6 +47,8 @@ void main() async {
         '596845297819-qlp7mf8aoglmpocoqoa4h94ae011njog.apps.googleusercontent.com',
     iosBundleId: 'com.example.laundromate',
   ));
+  */
+
   runApp(const MyApp());
 }
 
