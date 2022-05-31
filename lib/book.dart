@@ -1,4 +1,4 @@
-// ignore_for_file: avoid_function_literals_in_foreach_calls
+// ignore_for_file: avoid_function_literals_in_foreach_calls, prefer_adjacent_string_concatenation, unnecessary_string_interpolations
 
 import 'dart:math';
 import 'package:cloud_firestore/cloud_firestore.dart';
@@ -30,9 +30,10 @@ class LoadDataFromFireStore extends StatefulWidget {
 }
 
 class LoadDataFromFireStoreState extends State<LoadDataFromFireStore> {
+  //final List<TimeRegion>? _specialTimeRegions = <TimeRegion>[];
   final List<Color> _colorCollection = <Color>[];
   MeetingDataSource? events;
-  final List<String> options = <String>['Add', 'Delete', 'Update'];
+  //final List<String> options = <String>['Add', 'Delete', 'Update'];
   final fireStoreReference = FirebaseFirestore.instance;
   bool isInitialLoaded = false;
 
@@ -129,6 +130,21 @@ class LoadDataFromFireStoreState extends State<LoadDataFromFireStore> {
   @override
   Widget build(BuildContext context) {
     //isInitialLoaded = true;
+    String _text = '';
+    // String _time =
+    //     DateTime.parse(_text).add(const Duration(hours: 1)).toString();
+
+    void selectionChanged(CalendarSelectionDetails details) {
+      //DateTime dt;
+      if (_controller.view == CalendarView.month ||
+          _controller.view == CalendarView.timelineMonth) {
+        _text = DateFormat('dd/MM/yyyy').format(details.date!).toString();
+      } else {
+        _text =
+            DateFormat('dd/MM/yyyy HH:mm:ss').format(details.date!).toString();
+      }
+    }
+
     return Scaffold(
         appBar: AppBar(
             leading: IconButton(
@@ -141,35 +157,39 @@ class LoadDataFromFireStoreState extends State<LoadDataFromFireStore> {
             ),
             title: const Text('B O O K I N G'),
             backgroundColor: const Color.fromRGBO(0, 74, 173, 2)),
+
+        //Calendar UI
         body: SfCalendar(
-          view: CalendarView.month,
+          view: CalendarView.week,
           dataSource: events,
-          monthViewSettings: const MonthViewSettings(
-              showAgenda: true,
-              navigationDirection: MonthNavigationDirection.vertical),
-          allowedViews: const [
-            CalendarView.week,
-            CalendarView.day,
-            CalendarView.month,
-          ],
+          onSelectionChanged: selectionChanged,
+          controller: _controller,
+          onTap: calendarTapped,
+          dragAndDropSettings: const DragAndDropSettings(
+            indicatorTimeFormat: 'hh:mm',
+            showTimeIndicator: true,
+            timeIndicatorStyle: TextStyle(
+              backgroundColor: Color(0xFFCEE5D0),
+              color: Colors.black,
+              fontSize: 15,
+            ),
+          ),
           viewNavigationMode: ViewNavigationMode.snap,
           showDatePickerButton: true,
           showNavigationArrow: true,
-          allowViewNavigation: true,
           headerStyle: const CalendarHeaderStyle(textAlign: TextAlign.center),
           viewHeaderStyle: const ViewHeaderStyle(
               backgroundColor: Color.fromARGB(253, 255, 255, 255)),
-          controller: _controller,
-          //initialDisplayDate: DateTime.now(),
-          onTap: calendarTapped,
         ),
         floatingActionButton: Padding(
           padding: const EdgeInsets.all(8.0),
           child: Column(
             children: <Widget>[
               const SizedBox(
-                height: 550,
+                height: 500,
               ),
+
+              //Refresh Button
               FloatingActionButton(
                 backgroundColor: const Color.fromRGBO(0, 74, 173, 2),
                 onPressed: () {
@@ -177,9 +197,12 @@ class LoadDataFromFireStoreState extends State<LoadDataFromFireStore> {
                 },
                 child: const Icon(Icons.refresh),
               ),
+
               const SizedBox(
                 height: 10,
               ),
+
+              //Set Appt Button +
               FloatingActionButton(
                 backgroundColor: const Color.fromRGBO(0, 74, 173, 2),
                 onPressed: () {
@@ -187,12 +210,43 @@ class LoadDataFromFireStoreState extends State<LoadDataFromFireStore> {
                       .collection("CalendarAppointmentCollection")
                       .doc("1")
                       .set({
-                    'Subject': 'Mastering Flutter',
-                    'StartTime': '31/05/2022 09:00:00',
-                    'EndTime': '31/05/2022 19:30:00'
+                    'Subject': 'Name',
+                    'StartTime': _text,
+                    'EndTime': DateFormat('dd/MM/yyyy HH:mm:ss')
+                        .parse(_text)
+                        .add(const Duration(hours: 1))
+                        .toString()
                   });
                 },
                 child: const Icon(Icons.add),
+              ),
+
+              const SizedBox(
+                height: 10,
+              ),
+
+              //Delete Appt Button -
+              FloatingActionButton(
+                backgroundColor: const Color.fromRGBO(0, 74, 173, 2),
+                onPressed: () {
+                  showDialog(
+                      context: context,
+                      builder: (BuildContext context) {
+                        return AlertDialog(
+                          title: const Text(
+                              "Details shown by selection changed callback"),
+                          content: Text("You have selected " + '$_text'),
+                          actions: <Widget>[
+                            TextButton(
+                                onPressed: () {
+                                  Navigator.of(context).pop();
+                                },
+                                child: const Text('close'))
+                          ],
+                        );
+                      });
+                },
+                child: const Icon(Icons.remove),
               )
             ],
           ),

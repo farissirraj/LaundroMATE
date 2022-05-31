@@ -6,6 +6,7 @@ class Settings extends StatelessWidget {
   Settings({Key? key}) : super(key: key);
 
   final _emailController = TextEditingController();
+
   final _phoneNoController = TextEditingController();
 
   @override
