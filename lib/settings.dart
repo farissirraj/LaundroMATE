@@ -3,7 +3,10 @@
 import 'package:flutter/material.dart';
 
 class Settings extends StatelessWidget {
-  const Settings({Key? key}) : super(key: key);
+  Settings({Key? key}) : super(key: key);
+
+  final _emailController = TextEditingController();
+  final _phoneNoController = TextEditingController();
 
   @override
   Widget build(BuildContext context) {
@@ -17,6 +20,7 @@ class Settings extends StatelessWidget {
           Padding(
               padding: EdgeInsets.all(20.0),
               child: TextField(
+                controller: _emailController,
                 decoration: InputDecoration(
                   hintText: "NUS Email ID",
                   labelText: "Email",
@@ -26,6 +30,7 @@ class Settings extends StatelessWidget {
           Padding(
               padding: EdgeInsets.all(20.0),
               child: TextField(
+                controller: _phoneNoController,
                 decoration: InputDecoration(
                   hintText: "Phone Number",
                   labelText: "Phone Number",

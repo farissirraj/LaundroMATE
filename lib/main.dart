@@ -60,7 +60,7 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(home: const HomePage(), routes: <String, WidgetBuilder>{
       '/book': (context) => const LoadDataFromFireBase(),
-      '/settings': (context) => const Settings()
+      '/settings': (context) => Settings()
     });
   }
 }
