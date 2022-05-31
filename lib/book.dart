@@ -129,55 +129,73 @@ class LoadDataFromFireStoreState extends State<LoadDataFromFireStore> {
   Widget build(BuildContext context) {
     //isInitialLoaded = true;
     return Scaffold(
-      appBar: AppBar(
-          leading: IconButton(
-            icon: const Icon(Icons.arrow_back_ios),
-            iconSize: 20.0,
-            onPressed: () {
-              //Navigator.pop(context, true);
-              _goBack(context);
-            },
+        appBar: AppBar(
+            leading: IconButton(
+              icon: const Icon(Icons.arrow_back_ios),
+              iconSize: 20.0,
+              onPressed: () {
+                //Navigator.pop(context, true);
+                _goBack(context);
+              },
+            ),
+            title: const Text('B O O K I N G'),
+            backgroundColor: const Color.fromRGBO(0, 74, 173, 2)),
+        body: SfCalendar(
+          view: CalendarView.month,
+          dataSource: events,
+          monthViewSettings: const MonthViewSettings(
+              showAgenda: true,
+              navigationDirection: MonthNavigationDirection.vertical),
+          allowedViews: const [
+            CalendarView.week,
+            CalendarView.day,
+            CalendarView.month,
+          ],
+          viewNavigationMode: ViewNavigationMode.snap,
+          showDatePickerButton: true,
+          showNavigationArrow: true,
+          allowViewNavigation: true,
+          headerStyle: const CalendarHeaderStyle(textAlign: TextAlign.center),
+          viewHeaderStyle: const ViewHeaderStyle(
+              backgroundColor: Color.fromARGB(253, 255, 255, 255)),
+          controller: _controller,
+          //initialDisplayDate: DateTime.now(),
+          onTap: calendarTapped,
+        ),
+        floatingActionButton: Padding(
+          padding: const EdgeInsets.all(8.0),
+          child: Column(
+            children: <Widget>[
+              const SizedBox(
+                height: 550,
+              ),
+              FloatingActionButton(
+                backgroundColor: const Color.fromRGBO(0, 74, 173, 2),
+                onPressed: () {
+                  getDataFromFireStore();
+                },
+                child: const Icon(Icons.refresh),
+              ),
+              const SizedBox(
+                height: 10,
+              ),
+              FloatingActionButton(
+                backgroundColor: const Color.fromRGBO(0, 74, 173, 2),
+                onPressed: () {
+                  fireStoreReference
+                      .collection("CalendarAppointmentCollection")
+                      .doc("1")
+                      .set({
+                    'Subject': 'Mastering Flutter',
+                    'StartTime': '31/05/2022 09:00:00',
+                    'EndTime': '31/05/2022 19:30:00'
+                  });
+                },
+                child: const Icon(Icons.add),
+              )
+            ],
           ),
-          title: const Text('B O O K I N G'),
-          backgroundColor: const Color.fromRGBO(0, 74, 173, 2)),
-      body: SfCalendar(
-        view: CalendarView.month,
-        initialDisplayDate: DateTime(2020, 4, 5, 9, 0, 0),
-        dataSource: events,
-        monthViewSettings: const MonthViewSettings(
-            showAgenda: true,
-            navigationDirection: MonthNavigationDirection.vertical),
-        allowedViews: const [
-          CalendarView.week,
-          CalendarView.day,
-          CalendarView.month,
-        ],
-        viewNavigationMode: ViewNavigationMode.snap,
-        showDatePickerButton: true,
-        showNavigationArrow: true,
-        allowViewNavigation: true,
-        headerStyle: const CalendarHeaderStyle(textAlign: TextAlign.center),
-        viewHeaderStyle: const ViewHeaderStyle(
-            backgroundColor: Color.fromARGB(253, 255, 255, 255)),
-        controller: _controller,
-        //initialDisplayDate: DateTime.now(),
-        onTap: calendarTapped,
-      ),
-      floatingActionButton: FloatingActionButton(
-        backgroundColor: const Color.fromRGBO(0, 74, 173, 2),
-        onPressed: () {
-          fireStoreReference
-              .collection("CalendarAppointmentCollection")
-              .doc("3")
-              .set({
-            'Subject': 'Mastering Flutter',
-            'StartTime': '30/05/2022 08:00:00',
-            'EndTime': '30/05/2022 10:00:00'
-          });
-        },
-        child: const Icon(Icons.add),
-      ),
-    );
+        ));
   }
 
   void calendarTapped(CalendarTapDetails calendarTapDetails) {
