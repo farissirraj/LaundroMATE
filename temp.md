@@ -1,4 +1,4 @@
-// ignore_for_file: avoid_function_literals_in_foreach_calls
+// ignore_for_file: empty_catches
 
 import 'dart:math';
 import 'package:cloud_firestore/cloud_firestore.dart';
@@ -10,12 +10,20 @@ import 'package:intl/intl.dart';
 
 class LoadDataFromFireBase extends StatelessWidget {
   const LoadDataFromFireBase({Key? key}) : super(key: key);
+  /*
+  @override
+  Widget build(BuildContext context) {
+    return const MaterialApp(
+      debugShowCheckedModeBanner: false,
+      title: 'FireBase',
+      home: LoadDataFromFireStore(),
+    );
+  }
+  */
 
   @override
   Widget build(BuildContext context) {
     return const Scaffold(
-      //debugShowCheckedModeBanner: false,
-      //title: 'FireBase',
       body: LoadDataFromFireStore(),
     );
   }
@@ -31,9 +39,9 @@ class LoadDataFromFireStore extends StatefulWidget {
 class LoadDataFromFireStoreState extends State<LoadDataFromFireStore> {
   final List<Color> _colorCollection = <Color>[];
   MeetingDataSource? events;
-  final List<String> options = <String>['Add', 'Delete', 'Update'];
-  final fireStoreReference = FirebaseFirestore.instance;
-  bool isInitialLoaded = false;
+  //MeetingDataSource? events1;
+  //final List<String> options = <String>['Add', 'Delete', 'Update'];
+  final databaseReference = FirebaseFirestore.instance;
 
   final CalendarController _controller = CalendarController();
 
@@ -45,76 +53,25 @@ class LoadDataFromFireStoreState extends State<LoadDataFromFireStore> {
         setState(() {});
       });
     });
-    fireStoreReference
-        .collection("CalendarAppointmentCollection")
-        .snapshots()
-        .listen((event) {
-      event.docChanges.forEach((element) {
-        if (element.type == DocumentChangeType.added) {
-          if (!isInitialLoaded) {
-            return;
-          }
-
-          final Random random = Random();
-          Meeting app = Meeting.fromFireBaseSnapShotData(
-              element, _colorCollection[random.nextInt(9)]);
-          setState(() {
-            events!.appointments!.add(app);
-            events!.notifyListeners(CalendarDataSourceAction.add, [app]);
-          });
-        } else if (element.type == DocumentChangeType.modified) {
-          if (!isInitialLoaded) {
-            return;
-          }
-
-          final Random random = Random();
-          Meeting app = Meeting.fromFireBaseSnapShotData(
-              element, _colorCollection[random.nextInt(9)]);
-          setState(() {
-            int index = events!.appointments!
-                .indexWhere((app) => app.key == element.doc.id);
-
-            Meeting meeting = events!.appointments![index];
-
-            events!.appointments!.remove(meeting);
-            events!.notifyListeners(CalendarDataSourceAction.remove, [meeting]);
-            events!.appointments!.add(app);
-            events!.notifyListeners(CalendarDataSourceAction.add, [app]);
-          });
-        } else if (element.type == DocumentChangeType.removed) {
-          if (!isInitialLoaded) {
-            return;
-          }
-
-          setState(() {
-            int index = events!.appointments!
-                .indexWhere((app) => app.key == element.doc.id);
-
-            Meeting meeting = events!.appointments![index];
-            events!.appointments!.remove(meeting);
-            events!.notifyListeners(CalendarDataSourceAction.remove, [meeting]);
-          });
-        }
-      });
-    });
     super.initState();
   }
 
   Future<void> getDataFromFireStore() async {
-    var snapShotsValue = await fireStoreReference
+    //final now = DateTime.now().toUtc();
+    var snapShotsValue = await databaseReference
         .collection("CalendarAppointmentCollection")
         .get();
 
-    final Random random = Random();
+    final Random random = new Random();
     List<Meeting> list = snapShotsValue.docs
         .map((e) => Meeting(
-            eventName: e.data()['Subject'],
-            from:
-                DateFormat('dd/MM/yyyy HH:mm:ss').parse(e.data()['StartTime']),
-            to: DateFormat('dd/MM/yyyy HH:mm:ss').parse(e.data()['EndTime']),
-            background: _colorCollection[random.nextInt(9)],
-            isAllDay: false,
-            key: e.id))
+              eventName: e.data()['Subject'],
+              from: DateFormat('dd/MM/yyyy HH:mm:ss')
+                  .parse(e.data()['StartTime']),
+              to: DateFormat('dd/MM/yyyy HH:mm:ss').parse(e.data()['EndTime']),
+              background:
+                  _colorCollection[random.nextInt(9)], /*isAllDay: false*/
+            ))
         .toList();
     setState(() {
       events = MeetingDataSource(list);
@@ -122,27 +79,27 @@ class LoadDataFromFireStoreState extends State<LoadDataFromFireStore> {
   }
 
   _goBack(BuildContext context) {
-    Navigator.pop(context);
+    Navigator.pop(context, true);
   }
+
+  void add() {}
 
   @override
   Widget build(BuildContext context) {
-    //isInitialLoaded = true;
     return Scaffold(
       appBar: AppBar(
-          leading: IconButton(
-            icon: const Icon(Icons.arrow_back_ios),
-            iconSize: 20.0,
-            onPressed: () {
-              //Navigator.pop(context, true);
-              _goBack(context);
-            },
-          ),
-          title: const Text('B O O K I N G'),
-          backgroundColor: const Color.fromRGBO(0, 74, 173, 2)),
+        leading: IconButton(
+          icon: const Icon(Icons.arrow_back_ios),
+          iconSize: 20.0,
+          onPressed: () {
+            _goBack(context);
+          },
+        ),
+        title: const Text('B O O K I N G'),
+        backgroundColor: const Color.fromRGBO(0, 74, 173, 2),
+      ),
       body: SfCalendar(
         view: CalendarView.month,
-        initialDisplayDate: DateTime(2020, 4, 5, 9, 0, 0),
         dataSource: events,
         monthViewSettings: const MonthViewSettings(
             showAgenda: true,
@@ -160,13 +117,13 @@ class LoadDataFromFireStoreState extends State<LoadDataFromFireStore> {
         viewHeaderStyle: const ViewHeaderStyle(
             backgroundColor: Color.fromARGB(253, 255, 255, 255)),
         controller: _controller,
-        //initialDisplayDate: DateTime.now(),
+        initialDisplayDate: DateTime.now(),
         onTap: calendarTapped,
       ),
       floatingActionButton: FloatingActionButton(
         backgroundColor: const Color.fromRGBO(0, 74, 173, 2),
         onPressed: () {
-          fireStoreReference
+          databaseReference
               .collection("CalendarAppointmentCollection")
               .doc("3")
               .set({
@@ -237,30 +194,25 @@ class MeetingDataSource extends CalendarDataSource {
 }
 
 class Meeting {
-  String? eventName;
-  DateTime? from;
-  DateTime? to;
-  Color? background;
-  bool? isAllDay;
-  String? key;
+  String eventName;
+  DateTime from;
+  DateTime to;
+  Color background;
+  /*bool isAllDay;*/
 
-  Meeting(
-      {this.eventName,
-      this.from,
-      this.to,
-      this.background,
-      this.isAllDay,
-      this.key});
-
-  static Meeting fromFireBaseSnapShotData(dynamic element, Color color) {
-    return Meeting(
-        eventName: element.doc.data()!['Subject'],
-        from: DateFormat('dd/MM/yyyy HH:mm:ss')
-            .parse(element.doc.data()!['StartTime']),
-        to: DateFormat('dd/MM/yyyy HH:mm:ss')
-            .parse(element.doc.data()!['EndTime']),
-        background: color,
-        isAllDay: false,
-        key: element.doc.id);
-  }
+  Meeting({
+    required this.eventName,
+    required this.from,
+    required this.to,
+    required this.background,
+    /*required this.isAllDay*/
+  });
 }
+
+
+
+
+
+
+
+

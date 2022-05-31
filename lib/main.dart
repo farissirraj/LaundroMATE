@@ -12,7 +12,8 @@ void main() async {
   WidgetsFlutterBinding.ensureInitialized();
 
   //web-app
-  /*await Firebase.initializeApp(
+  /*
+  await Firebase.initializeApp(
       options: const FirebaseOptions(
     apiKey: 'AIzaSyB36RdgEfaYp6W595HLE0uhz2ShilysI0E',
     appId: '1:596845297819:web:33e9e8613dc6ced30a063e',
