@@ -47,7 +47,7 @@ class Settings extends StatelessWidget {
                   builder: (context) => AlertDialog(
                       title: Text(''),
                       content: Text(
-                        'S A V E D !',
+                        _emailController.text,
                         textAlign: TextAlign.center,
                         style: TextStyle(fontSize: 20),
                       ),
