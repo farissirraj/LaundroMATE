@@ -246,7 +246,7 @@ class LoadDataFromFireStoreState extends State<LoadDataFromFireStore> {
                         );
                       });
                 },
-                child: const Icon(Icons.remove),
+                child: const Icon(Icons.delete),
               )
             ],
           ),
