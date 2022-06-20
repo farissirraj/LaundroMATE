@@ -9,6 +9,8 @@ class Settings extends StatelessWidget {
 
   final _phoneNoController = TextEditingController();
 
+  final _roomNoController = TextEditingController();
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -28,6 +30,33 @@ class Settings extends StatelessWidget {
                 ),
               )),
           Padding(padding: EdgeInsets.all(0.5)),
+          SizedBox(
+            width: 350.0,
+            child: FloatingActionButton.extended(
+              onPressed: () {
+                showDialog(
+                  context: context,
+                  builder: (context) => AlertDialog(
+                      title: Text('Is this your email?'),
+                      content: Text(
+                        _emailController.text,
+                        textAlign: TextAlign.center,
+                        style: TextStyle(fontSize: 20),
+                      ),
+                      actions: [
+                        TextButton(
+                          child: Text('Yes'),
+                          onPressed: () => Navigator.pop(context),
+                        ),
+                      ]),
+                );
+              },
+              label: Text('UPDATE EMAIL'),
+              icon: Icon(Icons.save),
+              backgroundColor: Color.fromRGBO(0, 74, 173, 2),
+            ),
+          ),
+          Padding(padding: EdgeInsets.all(10)),
           Padding(
               padding: EdgeInsets.all(20.0),
               child: TextField(
@@ -37,7 +66,7 @@ class Settings extends StatelessWidget {
                   labelText: "Phone Number",
                 ),
               )),
-          Padding(padding: EdgeInsets.all(10)),
+          Padding(padding: EdgeInsets.all(0.5)),
           SizedBox(
             width: 350.0,
             child: FloatingActionButton.extended(
@@ -45,21 +74,58 @@ class Settings extends StatelessWidget {
                 showDialog(
                   context: context,
                   builder: (context) => AlertDialog(
-                      title: Text(''),
+                      title: Text('Is this your Phone Number?'),
                       content: Text(
-                        _emailController.text,
+                        _phoneNoController.text,
                         textAlign: TextAlign.center,
                         style: TextStyle(fontSize: 20),
                       ),
                       actions: [
                         TextButton(
-                          child: Text('OK'),
+                          child: Text('Yes'),
                           onPressed: () => Navigator.pop(context),
                         ),
                       ]),
                 );
               },
-              label: Text('S A V E'),
+              label: Text('UPDATE PHONE NUMBER'),
+              icon: Icon(Icons.save),
+              backgroundColor: Color.fromRGBO(0, 74, 173, 2),
+            ),
+          ),
+          Padding(padding: EdgeInsets.all(10)),
+          Padding(
+              padding: EdgeInsets.all(20.0),
+              child: TextField(
+                controller: _roomNoController,
+                decoration: InputDecoration(
+                  hintText: "Room Number",
+                  labelText: "Room Number",
+                ),
+              )),
+          Padding(padding: EdgeInsets.all(0.5)),
+          SizedBox(
+            width: 350.0,
+            child: FloatingActionButton.extended(
+              onPressed: () {
+                showDialog(
+                  context: context,
+                  builder: (context) => AlertDialog(
+                      title: Text('Is this your Room Number?'),
+                      content: Text(
+                        _roomNoController.text,
+                        textAlign: TextAlign.center,
+                        style: TextStyle(fontSize: 20),
+                      ),
+                      actions: [
+                        TextButton(
+                          child: Text('Yes'),
+                          onPressed: () => Navigator.pop(context),
+                        ),
+                      ]),
+                );
+              },
+              label: Text('UPDATE ROOM NUMBER'),
               icon: Icon(Icons.save),
               backgroundColor: Color.fromRGBO(0, 74, 173, 2),
             ),
