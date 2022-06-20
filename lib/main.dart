@@ -6,6 +6,7 @@ import 'dart:core';
 
 import 'settings.dart';
 import 'book.dart';
+import 'status.dart';
 //import 'generated_plugin_registrant.dart';
 
 void main() async {
@@ -60,7 +61,8 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(home: const HomePage(), routes: <String, WidgetBuilder>{
       '/book': (context) => const LoadDataFromFireBase(),
-      '/settings': (context) => Settings()
+      '/settings': (context) => Settings(),
+      '/status': (context) => Status()
     });
   }
 }
@@ -107,6 +109,23 @@ class HomePage extends StatelessWidget {
                 ),
                 onPressed: () {
                   Navigator.pushNamed(context, '/settings');
+                }),
+          ),
+          const SizedBox(height: 20),
+          SizedBox(
+            width: 280.0,
+            height: 50.0,
+            child: ElevatedButton(
+                child: const Text(
+                  'S T A T U S',
+                  style: const TextStyle(
+                      fontSize: 20, color: const Color.fromARGB(255, 0, 0, 0)),
+                ),
+                style: ElevatedButton.styleFrom(
+                  primary: Colors.white,
+                ),
+                onPressed: () {
+                  Navigator.pushNamed(context, '/status');
                 }),
           )
         ])));
