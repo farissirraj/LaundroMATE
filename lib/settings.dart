@@ -1,11 +1,15 @@
 // ignore_for_file: prefer_const_constructors
 
+import 'dart:ffi';
+
 import 'package:flutter/material.dart';
+
+String name = '';
 
 class Settings extends StatelessWidget {
   Settings({Key? key}) : super(key: key);
 
-  final _emailController = TextEditingController();
+  final _nameController = TextEditingController();
 
   final _phoneNoController = TextEditingController();
 
@@ -23,10 +27,10 @@ class Settings extends StatelessWidget {
           Padding(
               padding: EdgeInsets.all(20.0),
               child: TextField(
-                controller: _emailController,
+                controller: _nameController,
                 decoration: InputDecoration(
-                  hintText: "NUS Email ID",
-                  labelText: "Email",
+                  hintText: "Your Name",
+                  labelText: "Name",
                 ),
               )),
           Padding(padding: EdgeInsets.all(0.5)),
@@ -39,14 +43,17 @@ class Settings extends StatelessWidget {
                   builder: (context) => AlertDialog(
                       title: Text('Is this your email?'),
                       content: Text(
-                        _emailController.text,
+                        _nameController.text,
                         textAlign: TextAlign.center,
                         style: TextStyle(fontSize: 20),
                       ),
                       actions: [
                         TextButton(
                           child: Text('Yes'),
-                          onPressed: () => Navigator.pop(context),
+                          onPressed: () {
+                            name = _nameController.text;
+                            Navigator.pop(context);
+                          },
                         ),
                       ]),
                 );

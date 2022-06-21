@@ -209,7 +209,7 @@ class LoadDataFromFireStoreState extends State<LoadDataFromFireStore> {
                         .collection("CalendarAppointmentCollection")
                         .doc("1")
                         .set({
-                      'Subject': 'Name',
+                      'Subject': name,
                       'StartTime': _text,
                       'EndTime': _end
                     });
