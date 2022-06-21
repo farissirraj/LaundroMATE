@@ -190,7 +190,7 @@ class LoadDataFromFireStoreState extends State<LoadDataFromFireStore> {
           child: Column(
             children: <Widget>[
               const SizedBox(
-                height: 550,
+                height: 500,
               ),
               FloatingActionButton(
                 backgroundColor: const Color.fromRGBO(0, 74, 173, 2),
@@ -213,8 +213,40 @@ class LoadDataFromFireStoreState extends State<LoadDataFromFireStore> {
                       'StartTime': _text,
                       'EndTime': _end
                     });
+                    getDataFromFireStore();
                   },
-                  child: const Icon(Icons.add))
+                  child: const Icon(Icons.add)),
+              const SizedBox(
+                height: 10,
+              ),
+              //Delete Appt Button -
+              FloatingActionButton(
+                backgroundColor: const Color.fromRGBO(0, 74, 173, 2),
+                onPressed: () {
+                  showDialog(
+                      context: context,
+                      builder: (BuildContext context) {
+                        return AlertDialog(
+                          title: const Text("Are you sure you want to delete"),
+                          content: Text("Your slot at " + '$_text'),
+                          actions: <Widget>[
+                            TextButton(
+                                onPressed: () {
+                                  fireStoreReference
+                                      .collection(
+                                          "CalendarAppointmentCollection")
+                                      .doc("1")
+                                      .delete();
+                                  Navigator.of(context).pop();
+                                  getDataFromFireStore();
+                                },
+                                child: const Text('Yes'))
+                          ],
+                        );
+                      });
+                },
+                child: const Icon(Icons.delete),
+              )
             ],
           ),
         ));
