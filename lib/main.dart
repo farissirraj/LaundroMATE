@@ -7,11 +7,14 @@ import 'dart:core';
 import 'settings.dart';
 import 'book.dart';
 import 'status.dart';
+
 //import 'generated_plugin_registrant.dart';
+final navigatorKey = GlobalKey<NavigatorState>();
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
-
+  navigatorKey:
+  navigatorKey;
   //web-app
   /*
   await Firebase.initializeApp(

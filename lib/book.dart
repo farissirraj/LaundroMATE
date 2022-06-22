@@ -1,4 +1,4 @@
-// ignore_for_file: avoid_function_literals_in_foreach_calls
+// ignore_for_file: avoid_function_literals_in_foreach_calls, unused_import
 
 import 'dart:math';
 import 'package:cloud_firestore/cloud_firestore.dart';
@@ -8,9 +8,28 @@ import 'package:flutter/scheduler.dart';
 import 'package:syncfusion_flutter_calendar/calendar.dart';
 import 'package:intl/intl.dart';
 import 'settings.dart';
+import 'main.dart';
+import 'package:url_launcher/url_launcher.dart';
 
+String _start = '';
 String _end = '';
 
+class BookingDetails extends StatelessWidget {
+  const BookingDetails({Key? key}) : super(key: key);
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+        backgroundColor: const Color.fromRGBO(0, 74, 173, 2),
+        body: Center(
+            child: Column(children: <Widget>[
+          // ignore: avoid_unnecessary_containers
+          Container(child: const Image(image: AssetImage('assets/logo.png'))),
+          const SizedBox(width: 280.0, height: 50.0),
+        ])));
+  }
+}
+
+//get appts from the database
 class LoadDataFromFireBase extends StatelessWidget {
   const LoadDataFromFireBase({Key? key}) : super(key: key);
 
@@ -32,6 +51,12 @@ class LoadDataFromFireStore extends StatefulWidget {
 }
 
 class LoadDataFromFireStoreState extends State<LoadDataFromFireStore> {
+  String? _subjectText = '',
+      _startTimeText = '',
+      _endTimeText = '',
+      _dateText = '',
+      _timeDetails = '';
+
   final List<Color> _colorCollection = <Color>[];
   MeetingDataSource? events;
   final List<String> options = <String>['Add', 'Delete', 'Update'];
@@ -132,7 +157,7 @@ class LoadDataFromFireStoreState extends State<LoadDataFromFireStore> {
   Widget build(BuildContext context) {
     //isInitialLoaded = true;
     DateTime now = DateTime.now();
-    String _text = DateFormat('dd/MM/yyyy H:m:00').format(now);
+    String _text = DateFormat('dd/MM/yyyy HH:m:00').format(now);
 
     void selectionChanged(CalendarSelectionDetails details) {
       //DateTime dt;
@@ -143,6 +168,7 @@ class LoadDataFromFireStoreState extends State<LoadDataFromFireStore> {
         _text = DateFormat('dd/MM/yyyy HH:mm:00').format(details.date!);
       }
       DateTime later = details.date!.add(const Duration(hours: 1));
+      _start = DateFormat('dd/MM/yyyy HH:mm:00').format(details.date!);
       _end = DateFormat('dd/MM/yyyy HH:mm:00').format(later);
     }
 
@@ -161,30 +187,30 @@ class LoadDataFromFireStoreState extends State<LoadDataFromFireStore> {
             title: const Text('B O O K I N G'),
             backgroundColor: const Color.fromRGBO(0, 74, 173, 2)),
         body: SfCalendar(
-          view: CalendarView.week,
-          dataSource: events,
-          onSelectionChanged: selectionChanged,
-          monthViewSettings: const MonthViewSettings(
-              showAgenda: true,
-              navigationDirection: MonthNavigationDirection.vertical),
-          allowedViews: const [
-            CalendarView.week,
-            CalendarView.day,
-            CalendarView.month,
-          ],
-          viewNavigationMode: ViewNavigationMode.snap,
-          showDatePickerButton: true,
-          showNavigationArrow: true,
-          allowViewNavigation: true,
-          headerStyle: const CalendarHeaderStyle(textAlign: TextAlign.center),
-          viewHeaderStyle: const ViewHeaderStyle(
-              backgroundColor: Color.fromARGB(253, 255, 255, 255)),
-          controller: _controller,
-          //initialDisplayDate: DateTime.now(),
-          onTap: (CalendarTapDetails details) {
-            DateTime date = details.date!;
-          },
-        ),
+            view: CalendarView.week,
+            dataSource: events,
+            onSelectionChanged: selectionChanged,
+            // monthViewSettings: const MonthViewSettings(
+            //     showAgenda: true,
+            //     navigationDirection: MonthNavigationDirection.vertical),
+            allowedViews: const [
+              CalendarView.week,
+              CalendarView.day,
+              CalendarView.month,
+            ],
+            viewNavigationMode: ViewNavigationMode.snap,
+            showDatePickerButton: true,
+            showNavigationArrow: true,
+            allowViewNavigation: true,
+            headerStyle: const CalendarHeaderStyle(textAlign: TextAlign.center),
+            viewHeaderStyle: const ViewHeaderStyle(
+                backgroundColor: Color.fromARGB(253, 255, 255, 255)),
+            controller: _controller,
+            //initialDisplayDate: DateTime.now(),
+            // onTap: (CalendarTapDetails details) {
+            //   DateTime date = details.date!;
+            // }),
+            onTap: calendarTapped),
         floatingActionButton: Padding(
           padding: const EdgeInsets.all(8.0),
           child: Column(
@@ -228,7 +254,7 @@ class LoadDataFromFireStoreState extends State<LoadDataFromFireStore> {
                       builder: (BuildContext context) {
                         return AlertDialog(
                           title: const Text("Are you sure you want to delete"),
-                          content: Text("Your slot at " + '$_text'),
+                          content: Text("Your slot at " + _start),
                           actions: <Widget>[
                             TextButton(
                                 onPressed: () {
@@ -252,15 +278,81 @@ class LoadDataFromFireStoreState extends State<LoadDataFromFireStore> {
         ));
   }
 
-  void calendarTapped(CalendarTapDetails calendarTapDetails) {
-    if (_controller.view == CalendarView.month &&
-        calendarTapDetails.targetElement == CalendarElement.calendarCell) {
-      _controller.view = CalendarView.day;
-    } else if ((_controller.view == CalendarView.week ||
-            _controller.view == CalendarView.workWeek) &&
-        calendarTapDetails.targetElement == CalendarElement.viewHeader) {
-      _controller.view = CalendarView.day;
-    }
+  void calendarTapped(CalendarTapDetails details) async {
+    // if (_controller.view == CalendarView.month &&
+    //     details.targetElement == CalendarElement.calendarCell) {
+    //   _controller.view = CalendarView.day;
+    // } else if ((_controller.view == CalendarView.week ||
+    //         _controller.view == CalendarView.workWeek) &&
+    //     details.targetElement == CalendarElement.viewHeader) {
+    //   _controller.view = CalendarView.day;
+    // }
+    showDialog(
+        context: context,
+        builder: (context) => Center(
+              child: Material(
+                color: Colors.white,
+                child: Text('Hello'),
+              ),
+            ));
+
+    // AlertDialog(
+    //   title: Text('Welcome'),
+    //   content: Text('Do you wanna learn flutter?'),
+    //   actions: [
+    //     TextButton(
+    //       onPressed: () {
+    //         Navigator.of(context).pop();
+    //       },
+    //       child: const Text(
+    //         'YES',
+    //         style: TextStyle(color: Colors.black),
+    //       ),
+    //     ),
+    //   ],
+    // );
+
+    // if (details.targetElement == CalendarElement.appointment ||
+    //     details.targetElement == CalendarElement.agenda) {
+    //   final Appointment appointmentDetails = details.appointments![0];
+    //   _subjectText = appointmentDetails.subject;
+    //   _dateText = DateFormat('MMMM dd, yyyy')
+    //       .format(appointmentDetails.startTime)
+    //       .toString();
+    //   _startTimeText =
+    //       DateFormat('hh:mm a').format(appointmentDetails.startTime).toString();
+    //   _endTimeText =
+    //       DateFormat('hh:mm a').format(appointmentDetails.endTime).toString();
+    //   if (appointmentDetails.isAllDay) {
+    //     _timeDetails = 'All day';
+    //   } else {
+    //     _timeDetails = '$_startTimeText - $_endTimeText';
+    //   }
+    //   _timeDetails = '$_startTimeText - $_endTimeText';
+    //   showDialog(
+    //       context: context,
+    //       builder: (BuildContext context) {
+    //         return AlertDialog(
+    //             title: Text('$_subjectText'),
+    //             content: SizedBox(
+    //                 height: 80,
+    //                 child: Column(
+    //                   children: <Widget>[
+    //                     Row(
+    //                       children: <Widget>[
+    //                         Text(
+    //                           '$_dateText',
+    //                           style: const TextStyle(
+    //                             fontWeight: FontWeight.w400,
+    //                             fontSize: 20,
+    //                           ),
+    //                         ),
+    //                       ],
+    //                     ),
+    //                   ],
+    //                 )));
+    //       });
+    // }
   }
 
   void _initializeEventColor() {

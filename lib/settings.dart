@@ -58,7 +58,7 @@ class Settings extends StatelessWidget {
                       ]),
                 );
               },
-              label: Text('UPDATE EMAIL'),
+              label: Text('UPDATE NAME'),
               icon: Icon(Icons.save),
               backgroundColor: Color.fromRGBO(0, 74, 173, 2),
             ),
@@ -69,8 +69,8 @@ class Settings extends StatelessWidget {
               child: TextField(
                 controller: _phoneNoController,
                 decoration: InputDecoration(
-                  hintText: "Phone Number",
-                  labelText: "Phone Number",
+                  hintText: "Telegram Handle",
+                  labelText: "Telegram Handle",
                 ),
               )),
           Padding(padding: EdgeInsets.all(0.5)),
@@ -95,7 +95,7 @@ class Settings extends StatelessWidget {
                       ]),
                 );
               },
-              label: Text('UPDATE PHONE NUMBER'),
+              label: Text('UPDATE TELEGRAM HANDLE'),
               icon: Icon(Icons.save),
               backgroundColor: Color.fromRGBO(0, 74, 173, 2),
             ),
