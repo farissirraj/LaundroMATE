@@ -67,10 +67,7 @@ class LoadDataFromFireStoreState extends State<LoadDataFromFireStore> {
         setState(() {});
       });
     });
-    fireStoreReference
-        .collection("CalendarAppointmentCollection")
-        .snapshots()
-        .listen((event) {
+    fireStoreReference.collection(name).snapshots().listen((event) {
       event.docChanges.forEach((element) {
         if (element.type == DocumentChangeType.added) {
           if (!isInitialLoaded) {
@@ -123,9 +120,7 @@ class LoadDataFromFireStoreState extends State<LoadDataFromFireStore> {
   }
 
   Future<void> getDataFromFireStore() async {
-    var snapShotsValue = await fireStoreReference
-        .collection("CalendarAppointmentCollection")
-        .get();
+    var snapShotsValue = await fireStoreReference.collection(name).get();
 
     final Random random = Random();
     List<Meeting> list = snapShotsValue.docs
@@ -221,14 +216,8 @@ class LoadDataFromFireStoreState extends State<LoadDataFromFireStore> {
               FloatingActionButton(
                   backgroundColor: const Color.fromRGBO(0, 74, 173, 2),
                   onPressed: () {
-                    fireStoreReference
-                        .collection("CalendarAppointmentCollection")
-                        .doc("1")
-                        .set({
-                      'Subject': name,
-                      'StartTime': _text,
-                      'EndTime': _end
-                    });
+                    fireStoreReference.collection(name).doc(telegram).set(
+                        {'Subject': name, 'StartTime': _text, 'EndTime': _end});
                     getDataFromFireStore();
                   },
                   child: const Icon(Icons.add)),
@@ -250,9 +239,8 @@ class LoadDataFromFireStoreState extends State<LoadDataFromFireStore> {
                             TextButton(
                                 onPressed: () {
                                   fireStoreReference
-                                      .collection(
-                                          "CalendarAppointmentCollection")
-                                      .doc("1")
+                                      .collection(name)
+                                      .doc(telegram)
                                       .delete();
                                   Navigator.of(context).pop();
                                   getDataFromFireStore();
@@ -279,12 +267,12 @@ class LoadDataFromFireStoreState extends State<LoadDataFromFireStore> {
               shape: RoundedRectangleBorder(
                 borderRadius: BorderRadius.circular(10),
               ),
-              title: const Text('Contact'),
+              title: Text('Contact $name?'),
               //content: const Text('Test'),
               actions: <Widget>[
                 TextButton(
                   onPressed: () {
-                    launchUrl(Uri.parse("https:google.com"));
+                    launchUrl(Uri.parse("https://t.me/$telegram"));
 
                     Navigator.of(context).pop();
                   },
