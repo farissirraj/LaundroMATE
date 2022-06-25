@@ -6,8 +6,8 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'book.dart';
 
-String name = 'Faris';
-String telegram = 'faris096';
+String name = 'Sirraj';
+String telegram = 'sirraj09';
 
 class Settings extends StatelessWidget {
   Settings({Key? key}) : super(key: key);
@@ -18,6 +18,7 @@ class Settings extends StatelessWidget {
 
   //final _roomNoController = TextEditingController();
 
+  final fireStoreReference = FirebaseFirestore.instance;
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -79,7 +80,9 @@ class Settings extends StatelessWidget {
                   labelText: "Telegram Handle",
                 ),
               )),
+
           Padding(padding: EdgeInsets.all(0.5)),
+
           SizedBox(
             width: 350.0,
             child: FloatingActionButton.extended(
@@ -97,7 +100,32 @@ class Settings extends StatelessWidget {
                         TextButton(
                           child: Text('Yes'),
                           onPressed: () {
-                            telegram = _nameController.text;
+                            fireStoreReference
+                                .collection('RC4')
+                                .doc(telegram)
+                                .delete();
+                            changeHandle(_telegramController.text);
+                            Navigator.of(context).pop();
+
+                            showDialog(
+                                context: context,
+                                builder: (BuildContext context) {
+                                  return AlertDialog(
+                                    shape: RoundedRectangleBorder(
+                                        borderRadius:
+                                            BorderRadius.circular(10)),
+                                    title: const Text('Alert!'),
+                                    content: const Text(
+                                        'Please rebook your appointment!'),
+                                    actions: <Widget>[
+                                      TextButton(
+                                          onPressed: () {
+                                            Navigator.of(context).pop();
+                                          },
+                                          child: Text('Okay!'))
+                                    ],
+                                  );
+                                });
                           },
                         ),
                       ]),
@@ -109,44 +137,12 @@ class Settings extends StatelessWidget {
             ),
           ),
           Padding(padding: EdgeInsets.all(5)),
-          // Padding(
-          //     padding: EdgeInsets.all(20.0),
-          //     child: TextField(
-          //       controller: _roomNoController,
-          //       decoration: InputDecoration(
-          //         hintText: "Room Number",
-          //         labelText: "Room Number",
-          //       ),
-          //     )),
-          // Padding(padding: EdgeInsets.all(0.5)),
-          // SizedBox(
-          //   width: 350.0,
-          //   child: FloatingActionButton.extended(
-          //     onPressed: () {
-          //       showDialog(
-          //         context: context,
-          //         builder: (context) => AlertDialog(
-          //             title: Text('Is this your Room Number?'),
-          //             content: Text(
-          //               _roomNoController.text,
-          //               textAlign: TextAlign.center,
-          //               style: TextStyle(fontSize: 20),
-          //             ),
-          //             actions: [
-          //               TextButton(
-          //                 child: Text('Yes'),
-          //                 onPressed: () => Navigator.pop(context),
-          //               ),
-          //             ]),
-          //       );
-          //     },
-          //     label: Text('UPDATE ROOM NUMBER'),
-          //     icon: Icon(Icons.save),
-          //     backgroundColor: Color.fromRGBO(0, 74, 173, 2),
-          //   ),
-          // )
         ],
       ),
     );
+  }
+
+  void changeHandle(String newHandle) {
+    telegram = newHandle;
   }
 }
