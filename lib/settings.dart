@@ -146,3 +146,28 @@ class Settings extends StatelessWidget {
     telegram = newHandle;
   }
 }
+
+
+
+/*
+
+FirebaseFirestore rootRef = FirebaseFirestore.getInstance();
+DocumentReference docIdRef = rootRef.collection("yourCollection").document(docId);
+docIdRef.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+    @Override
+    public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+        if (task.isSuccessful()) {
+            DocumentSnapshot document = task.getResult();
+            if (document.exists()) {
+                Log.d(TAG, "Document exists!");
+            } else {
+                Log.d(TAG, "Document does not exist!");
+            }
+        } else {
+            Log.d(TAG, "Failed with: ", task.getException());
+        }
+    }
+});
+
+
+*/

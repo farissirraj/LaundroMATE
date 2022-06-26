@@ -10,6 +10,7 @@ import 'package:intl/intl.dart';
 import 'settings.dart';
 import 'main.dart';
 import 'package:url_launcher/url_launcher.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 
 String _start = '';
 String _end = '';
@@ -234,6 +235,35 @@ class LoadDataFromFireStoreState extends State<LoadDataFromFireStore> {
     fireStoreReference.collection('RC4').doc(telegram).delete();
   }
 
+  void deleteStatus(String name, String telegram) {
+    fireStoreReference.collection('LaundryRC4').doc('status').delete();
+  }
+
+  checkIfDocExists() async {
+    DocumentSnapshot ds =
+        await fireStoreReference.collection('LaundryRC4').doc('status').get();
+    int status = ds.get('status');
+    if (status == 1) {
+      fireStoreReference
+          .collection('LaundryRC4')
+          .doc('status')
+          .set({'status': 0});
+    }
+    if (status == 0) {
+      fireStoreReference
+          .collection('LaundryRC4')
+          .doc('status')
+          .set({'status': 1});
+    }
+    // var data = ds.data();
+    // if (data['status'] == 1) {
+    //   return true;
+    // }
+    // if (ds.exists == false) {
+    //   return false;
+    // }
+  }
+
   //CALENDAR TAPPED FOR CONTACT
   void calendarTapped(CalendarTapDetails details) async {
     if (details.targetElement == CalendarElement.appointment ||
@@ -264,6 +294,14 @@ class LoadDataFromFireStoreState extends State<LoadDataFromFireStore> {
                       getDataFromFireStore();
                     },
                     child: const Text('Delete Appointment'),
+                  ),
+                  TextButton(
+                    onPressed: () {
+                      checkIfDocExists();
+                      Navigator.of(context).pop();
+                      getDataFromFireStore();
+                    },
+                    child: const Text('Started/Finished'),
                   ),
                   TextButton(
                     onPressed: () => Navigator.of(context).pop(),
