@@ -7,25 +7,22 @@
 
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
+import 'package:laundromate/book.dart';
 
 import 'package:laundromate/main.dart';
 import 'package:laundromate/homescreen.dart';
 
 void main() {
-  testWidgets('Counter increments smoke test', (WidgetTester tester) async {
+  testWidgets('Test Calendar', (WidgetTester tester) async {
     // Build our app and trigger a frame.
-    await tester.pumpWidget(const MyApp());
+    await tester.pumpWidget(const MaterialApp(home: LoadDataFromFireBase()));
 
-    // Verify that our counter starts at 0.
-    expect(find.text('0'), findsOneWidget);
-    expect(find.text('1'), findsNothing);
+    final calendar = find.byKey(ValueKey("CalendarUI"));
+    final refresh = find.byKey(ValueKey("RefreshButton"));
+    final add = find.byKey(ValueKey("AddButton"));
 
-    // Tap the '+' icon and trigger a frame.
-    await tester.tap(find.byIcon(Icons.add));
+    tester.tap(add);
+    tester.tap(refresh);
     await tester.pump();
-
-    // Verify that our counter has incremented.
-    expect(find.text('0'), findsNothing);
-    expect(find.text('1'), findsOneWidget);
   });
 }

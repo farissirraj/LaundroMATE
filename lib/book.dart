@@ -148,8 +148,27 @@ class LoadDataFromFireStoreState extends State<LoadDataFromFireStore> {
   Widget build(BuildContext context) {
     //isInitialLoaded = true;
     DateTime now = DateTime.now();
-    String _text = DateFormat('dd/MM/yyyy HH:m:00').format(now);
+    String _text = DateFormat('dd/MM/yyyy HH:mm:00').format(now);
+    //String _text = '';
 
+    //for widget testing
+    // void selectionChanged(CalendarSelectionDetails details) {
+    //   //DateTime dt;
+    //   if (_controller.view == CalendarView.month ||
+    //       _controller.view == CalendarView.timelineMonth) {
+    //     _text = DateFormat('dd/MM/yyyy HH:mm:00').format(details.date!);
+    //     DateTime later = details.date!.add(const Duration(hours: 1));
+    //     _start = DateFormat('dd/MM/yyyy HH:mm:00').format(details.date!);
+    //     _end = DateFormat('dd/MM/yyyy HH:mm:00').format(later);
+    //   } else {
+    //     //_text = DateFormat('dd/MM/yyyy HH:mm:00').format(details.date!);
+    //     _start = DateFormat('dd/MM/yyyy HH:mm:00').format(now);
+    //     DateTime later = now.add(const Duration(hours: 1));
+    //     _end = DateFormat('dd/MM/yyyy HH:mm:00').format(later);
+    //   }
+    // }
+
+    //what works
     void selectionChanged(CalendarSelectionDetails details) {
       //DateTime dt;
       if (_controller.view == CalendarView.month ||
@@ -177,6 +196,7 @@ class LoadDataFromFireStoreState extends State<LoadDataFromFireStore> {
             title: const Text('B O O K I N G'),
             backgroundColor: const Color.fromRGBO(0, 74, 173, 2)),
         body: SfCalendar(
+            key: const Key("CalendarUI"),
             view: CalendarView.week,
             dataSource: events,
             onSelectionChanged: selectionChanged,
@@ -204,6 +224,7 @@ class LoadDataFromFireStoreState extends State<LoadDataFromFireStore> {
 
               //Refresh Calendar Button
               FloatingActionButton(
+                key: const Key("RefreshButton"),
                 backgroundColor: const Color.fromRGBO(0, 74, 173, 2),
                 onPressed: () {
                   getDataFromFireStore();
@@ -216,6 +237,7 @@ class LoadDataFromFireStoreState extends State<LoadDataFromFireStore> {
 
               //Add Appointment Button
               FloatingActionButton(
+                  key: const Key("AddButton"),
                   backgroundColor: const Color.fromRGBO(0, 74, 173, 2),
                   onPressed: () {
                     fireStoreReference
@@ -223,7 +245,7 @@ class LoadDataFromFireStoreState extends State<LoadDataFromFireStore> {
                         .doc(globals.telegram)
                         .set({
                       'Subject': globals.name,
-                      'StartTime': _text,
+                      'StartTime': _start,
                       'EndTime': _end
                     });
 
@@ -325,6 +347,93 @@ class LoadDataFromFireStoreState extends State<LoadDataFromFireStore> {
     }
   }
 
+  /*
+  void calendarTapped(CalendarTapDetails details) async {
+    DocumentSnapshot appt =
+        await fireStoreReference.collection('RC4').doc(globals.telegram).get();
+    String apptName = appt.get('Subject');
+
+    if ((details.targetElement == CalendarElement.appointment ||
+        details.targetElement == CalendarElement.agenda)) {
+      //check if the appointment is yours
+      if (true) {
+        showDialog(
+            context: context,
+            builder: (BuildContext context) {
+              return AlertDialog(
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(10),
+                ),
+                title: const Text('Options:'),
+                actions: <Widget>[
+                  TextButton(
+                    onPressed: () {
+                      launchUrl(Uri.parse("https://t.me/$telegram"));
+
+                      Navigator.of(context).pop();
+                    },
+                    child: Text('Message $name'),
+                  ),
+                  TextButton(
+                    onPressed: () {
+                      delete(name, telegram);
+                      Navigator.of(context).pop();
+                      getDataFromFireStore();
+                    },
+                    child: const Text('Delete Appointment'),
+                  ),
+                  TextButton(
+                    onPressed: () {
+                      checkIfDocExists();
+                      Navigator.of(context).pop();
+                      getDataFromFireStore();
+                    },
+                    child: const Text('Started/Finished'),
+                  ),
+                  TextButton(
+                    onPressed: () => Navigator.of(context).pop(),
+                    child: const Text('Cancel'),
+                  ),
+                ],
+              );
+            });
+      } else {
+        showDialog(
+            context: context,
+            builder: (BuildContext context) {
+              return AlertDialog(
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(10),
+                ),
+                title: const Text('Options:'),
+                actions: <Widget>[
+                  TextButton(
+                    onPressed: () {
+                      launchUrl(Uri.parse("https://t.me/$telegram"));
+
+                      Navigator.of(context).pop();
+                    },
+                    child: Text('Message $name'),
+                  ),
+                  TextButton(
+                    onPressed: () {
+                      checkIfDocExists();
+                      Navigator.of(context).pop();
+                      getDataFromFireStore();
+                    },
+                    child: const Text('Started/Finished'),
+                  ),
+                  TextButton(
+                    onPressed: () => Navigator.of(context).pop(),
+                    child: const Text('Cancel'),
+                  ),
+                ],
+              );
+            });
+      }
+    }
+  }
+*/
   void _initializeEventColor() {
     _colorCollection.add(const Color(0xFF0F8644));
     _colorCollection.add(const Color(0xFF8B1FA9));

@@ -35,7 +35,7 @@ class Settings extends StatelessWidget {
               child: TextField(
                 controller: _nameController,
                 decoration: InputDecoration(
-                  hintText: "Your Name",
+                  hintText: globals.name,
                   labelText: "Name",
                 ),
               )),
@@ -77,7 +77,7 @@ class Settings extends StatelessWidget {
               child: TextField(
                 controller: _telegramController,
                 decoration: InputDecoration(
-                  hintText: "Telegram Handle",
+                  hintText: globals.telegram,
                   labelText: "Telegram Handle",
                 ),
               )),
