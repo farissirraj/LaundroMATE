@@ -1,10 +1,11 @@
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'dart:core';
+import 'globals.dart';
 
 import 'settings.dart';
 import 'book.dart';
-import 'status.dart';
+import 'statusOne.dart';
 
 class MyApp extends StatelessWidget {
   const MyApp({Key? key}) : super(key: key);
@@ -14,7 +15,7 @@ class MyApp extends StatelessWidget {
     return MaterialApp(home: const HomePage(), routes: <String, WidgetBuilder>{
       '/book': (context) => const LoadDataFromFireBase(),
       '/settings': (context) => Settings(),
-      '/status': (context) => Status()
+      '/status': (context) => const StatusOne()
     });
   }
 }
@@ -70,8 +71,8 @@ class HomePage extends StatelessWidget {
             child: ElevatedButton(
                 child: const Text(
                   'S T A T U S',
-                  style: const TextStyle(
-                      fontSize: 20, color: const Color.fromARGB(255, 0, 0, 0)),
+                  style: TextStyle(
+                      fontSize: 20, color: Color.fromARGB(255, 0, 0, 0)),
                 ),
                 style: ElevatedButton.styleFrom(
                   primary: Colors.white,

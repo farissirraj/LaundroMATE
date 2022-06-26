@@ -3,11 +3,12 @@
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'dart:core';
+import 'globals.dart';
 
 import 'homescreen.dart';
 import 'settings.dart';
 import 'book.dart';
-import 'status.dart';
+import 'statusOne.dart';
 
 //import 'generated_plugin_registrant.dart';
 final navigatorKey = GlobalKey<NavigatorState>();

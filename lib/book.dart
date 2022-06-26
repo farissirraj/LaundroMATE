@@ -11,6 +11,7 @@ import 'settings.dart';
 import 'main.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'globals.dart' as globals;
 
 String _start = '';
 String _end = '';
@@ -242,18 +243,22 @@ class LoadDataFromFireStoreState extends State<LoadDataFromFireStore> {
   checkIfDocExists() async {
     DocumentSnapshot ds =
         await fireStoreReference.collection('LaundryRC4').doc('status').get();
-    int status = ds.get('status');
-    if (status == 1) {
+    globals.status = ds.get('status');
+    if (globals.status == 1) {
       fireStoreReference
           .collection('LaundryRC4')
           .doc('status')
           .set({'status': 0});
+      globals.wmPath = 'assets/wm_green.png';
+      globals.dPath = 'assets/dryer_red.png';
     }
-    if (status == 0) {
+    if (globals.status == 0) {
       fireStoreReference
           .collection('LaundryRC4')
           .doc('status')
           .set({'status': 1});
+      globals.wmPath = 'assets/wm_red.png';
+      globals.dPath = 'assets/dryer_green.png';
     }
     // var data = ds.data();
     // if (data['status'] == 1) {
