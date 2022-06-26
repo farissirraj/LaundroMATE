@@ -30,13 +30,13 @@ class StatusOne extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    if (globals.status == 1) {
-      globals.wmPath = 'assets/wm_green.png';
-      globals.dPath = 'assets/dryer_red.png';
-    } else {
-      globals.wmPath = 'assets/wm_red.png';
-      globals.dPath = 'assets/dryer_green.png';
-    }
+    // if (globals.status == 1) {
+    //   globals.wmPath = 'assets/wm_green.png';
+    //   globals.dPath = 'assets/dryer_red.png';
+    // } else {
+    //   globals.wmPath = 'assets/wm_red.png';
+    //   globals.dPath = 'assets/dryer_green.png';
+    // }
     return Scaffold(
         appBar: AppBar(
           title: const Text('S T A T U S'),

@@ -5,7 +5,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'book.dart';
-import 'globals.dart';
+import 'globals.dart' as globals;
 
 String name = 'Sirraj';
 String telegram = 'sirraj09';
@@ -57,7 +57,7 @@ class Settings extends StatelessWidget {
                         TextButton(
                           child: Text('Yes'),
                           onPressed: () {
-                            name = _nameController.text;
+                            globals.name = _nameController.text;
                             Navigator.pop(context);
                           },
                         ),
@@ -103,7 +103,7 @@ class Settings extends StatelessWidget {
                           onPressed: () {
                             fireStoreReference
                                 .collection('RC4')
-                                .doc(telegram)
+                                .doc(globals.telegram)
                                 .delete();
                             changeHandle(_telegramController.text);
                             Navigator.of(context).pop();
@@ -144,6 +144,6 @@ class Settings extends StatelessWidget {
   }
 
   void changeHandle(String newHandle) {
-    telegram = newHandle;
+    globals.telegram = newHandle;
   }
 }

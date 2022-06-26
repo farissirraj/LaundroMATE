@@ -218,8 +218,14 @@ class LoadDataFromFireStoreState extends State<LoadDataFromFireStore> {
               FloatingActionButton(
                   backgroundColor: const Color.fromRGBO(0, 74, 173, 2),
                   onPressed: () {
-                    fireStoreReference.collection('RC4').doc(telegram).set(
-                        {'Subject': name, 'StartTime': _text, 'EndTime': _end});
+                    fireStoreReference
+                        .collection('RC4')
+                        .doc(globals.telegram)
+                        .set({
+                      'Subject': globals.name,
+                      'StartTime': _text,
+                      'EndTime': _end
+                    });
 
                     getDataFromFireStore();
                   },
@@ -233,7 +239,7 @@ class LoadDataFromFireStoreState extends State<LoadDataFromFireStore> {
   }
 
   void delete(String name, String telegram) {
-    fireStoreReference.collection('RC4').doc(telegram).delete();
+    fireStoreReference.collection('RC4').doc(globals.telegram).delete();
   }
 
   void deleteStatus(String name, String telegram) {
