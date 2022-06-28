@@ -286,13 +286,6 @@ class LoadDataFromFireStoreState extends State<LoadDataFromFireStore> {
       globals.wmPath = 'assets/wm_red.png';
       globals.dPath = 'assets/dryer_green.png';
     }
-    // var data = ds.data();
-    // if (data['status'] == 1) {
-    //   return true;
-    // }
-    // if (ds.exists == false) {
-    //   return false;
-    // }
   }
 
   //CALENDAR TAPPED FOR CONTACT
