@@ -13,8 +13,8 @@ import 'package:url_launcher/url_launcher.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'globals.dart' as globals;
 
-String _start = '';
-String _end = '';
+//String _start = '';
+//String _end = '';
 
 class BookingDetails extends StatelessWidget {
   const BookingDetails({Key? key}) : super(key: key);
@@ -178,11 +178,9 @@ class LoadDataFromFireStoreState extends State<LoadDataFromFireStore> {
         _text = DateFormat('dd/MM/yyyy HH:mm:00').format(details.date!);
       }
       DateTime later = details.date!.add(const Duration(hours: 1));
-      _start = DateFormat('dd/MM/yyyy HH:mm:00').format(details.date!);
-      _end = DateFormat('dd/MM/yyyy HH:mm:00').format(later);
+      globals.start = DateFormat('dd/MM/yyyy HH:mm:00').format(details.date!);
+      globals.end = DateFormat('dd/MM/yyyy HH:mm:00').format(later);
     }
-
-    //DateTime now1 = DateTime.parse('_text');
 
     return Scaffold(
         appBar: AppBar(
@@ -245,8 +243,8 @@ class LoadDataFromFireStoreState extends State<LoadDataFromFireStore> {
                         .doc(globals.telegram)
                         .set({
                       'Subject': globals.name,
-                      'StartTime': _start,
-                      'EndTime': _end
+                      'StartTime': globals.start,
+                      'EndTime': globals.end
                     });
 
                     getDataFromFireStore();
