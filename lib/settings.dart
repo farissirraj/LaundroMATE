@@ -17,8 +17,6 @@ class Settings extends StatelessWidget {
 
   final _telegramController = TextEditingController();
 
-  //final _roomNoController = TextEditingController();
-
   final fireStoreReference = FirebaseFirestore.instance;
   @override
   Widget build(BuildContext context) {

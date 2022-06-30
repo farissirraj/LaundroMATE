@@ -15,6 +15,11 @@ import 'globals.dart' as globals;
 
 //String _start = '';
 //String _end = '';
+DocumentSnapshot appt = FirebaseFirestore.instance
+    .collection('RC4')
+    .doc(globals.start)
+    .get() as DocumentSnapshot<Object?>;
+String apptName = appt.get('Subject');
 
 class BookingDetails extends StatelessWidget {
   const BookingDetails({Key? key}) : super(key: key);
@@ -240,7 +245,7 @@ class LoadDataFromFireStoreState extends State<LoadDataFromFireStore> {
                   onPressed: () {
                     fireStoreReference
                         .collection('RC4')
-                        .doc(globals.telegram)
+                        .doc(globals.start)
                         .set({
                       'Subject': globals.name,
                       'StartTime': globals.start,
@@ -293,6 +298,10 @@ class LoadDataFromFireStoreState extends State<LoadDataFromFireStore> {
     if (details.targetElement == CalendarElement.appointment ||
         details.targetElement == CalendarElement.agenda) {
       //check if the appointment is yours
+      DocumentSnapshot appt =
+          await fireStoreReference.collection('RC4').doc(globals.start).get();
+      String apptName = appt.get('Subject');
+
       if (true) {
         showDialog(
             context: context,
@@ -309,7 +318,7 @@ class LoadDataFromFireStoreState extends State<LoadDataFromFireStore> {
 
                       Navigator.of(context).pop();
                     },
-                    child: Text('Message $name'),
+                    child: Text('Message $apptName'),
                   ),
                   TextButton(
                     onPressed: () {
