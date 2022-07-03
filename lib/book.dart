@@ -253,8 +253,8 @@ class LoadDataFromFireStoreState extends State<LoadDataFromFireStore> {
                       'StartTime': globals.start,
                       'EndTime': globals.end
                     });
-                    NotificationService()
-                        .showNotification(1, "LaundroMATE", "Alert!");
+                    NotificationService().showNotification(1, "LaundroMATE",
+                        "Your Laundry Appointment is approaching!");
                     getDataFromFireStore();
                   },
                   child: const Icon(Icons.add)),
@@ -334,6 +334,7 @@ class LoadDataFromFireStoreState extends State<LoadDataFromFireStore> {
                   TextButton(
                     onPressed: () {
                       checkIfDocExists();
+                      NotificationService().cancelNotifications();
                       Navigator.of(context).pop();
                       getDataFromFireStore();
                     },
