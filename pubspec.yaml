@@ -37,7 +37,7 @@ dependencies:
   flutter_launcher_icons: ^0.9.3
   introduction_screen: ^3.0.2
   shared_preferences: ^2.0.15
-  flutter_local_notifications: ^9.5.3+1
+  flutter_local_notifications: ^9.6.1
   timezone: ^0.8.0
   awesome_notifications: ^0.6.21
 

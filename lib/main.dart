@@ -7,6 +7,7 @@ import 'dart:core';
 import 'globals.dart';
 
 import 'homescreen.dart';
+import 'notificationservice.dart';
 import 'settings.dart';
 import 'book.dart';
 import 'statusOne.dart';
@@ -58,19 +59,8 @@ void main() async {
   ));
   */
 
-  AwesomeNotifications().initialize(
-    'resource://drawable/res_notification_app_icon',
-    [
-      NotificationChannel(
-          channelKey: 'scheduled_channel',
-          channelName: 'Scheduled Notifications',
-          defaultColor: Colors.teal,
-          locked: true,
-          importance: NotificationImportance.High,
-          soundSource: 'resource://raw/res_custom_notification',
-          channelDescription: ''),
-    ],
-  );
+  WidgetsFlutterBinding.ensureInitialized();
+  NotificationService().initNotification();
 
   runApp(const MyApp());
 }
