@@ -183,6 +183,7 @@ class LoadDataFromFireStoreState extends State<LoadDataFromFireStore> {
         _text = DateFormat('dd/MM/yyyy HH:mm:00').format(details.date!);
       }
       DateTime later = details.date!.add(const Duration(hours: 1));
+      globals.select = later;
       globals.start = DateFormat('dd/MM/yyyy HH:mm:00').format(details.date!);
       globals.end = DateFormat('dd/MM/yyyy HH:mm:00').format(later);
     }
@@ -243,11 +244,9 @@ class LoadDataFromFireStoreState extends State<LoadDataFromFireStore> {
                   key: const Key("AddButton"),
                   backgroundColor: const Color.fromRGBO(0, 74, 173, 2),
                   onPressed: () {
-                    fireStoreReference
-                        .collection('RC4')
-                        .doc(globals.start)
-                        .set({
-                      'Subject': globals.name,
+                    fireStoreReference.collection('RC4').doc(globals.name).set({
+                      'Subject': globals.telegram,
+                      'Name': globals.name,
                       'StartTime': globals.start,
                       'EndTime': globals.end
                     });
