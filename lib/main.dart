@@ -1,5 +1,6 @@
 // ignore_for_file: unnecessary_const
 
+import 'package:awesome_notifications/awesome_notifications.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'dart:core';
@@ -9,6 +10,7 @@ import 'homescreen.dart';
 import 'settings.dart';
 import 'book.dart';
 import 'statusOne.dart';
+import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 
 //import 'generated_plugin_registrant.dart';
 final navigatorKey = GlobalKey<NavigatorState>();
@@ -55,6 +57,20 @@ void main() async {
     iosBundleId: 'com.example.laundromate',
   ));
   */
+
+  AwesomeNotifications().initialize(
+    'resource://drawable/res_notification_app_icon',
+    [
+      NotificationChannel(
+          channelKey: 'scheduled_channel',
+          channelName: 'Scheduled Notifications',
+          defaultColor: Colors.teal,
+          locked: true,
+          importance: NotificationImportance.High,
+          soundSource: 'resource://raw/res_custom_notification',
+          channelDescription: ''),
+    ],
+  );
 
   runApp(const MyApp());
 }

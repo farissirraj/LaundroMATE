@@ -5,6 +5,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/scheduler.dart';
+import 'package:laundromate/notificationservice.dart';
 import 'package:syncfusion_flutter_calendar/calendar.dart';
 import 'package:intl/intl.dart';
 import 'settings.dart';
@@ -184,8 +185,10 @@ class LoadDataFromFireStoreState extends State<LoadDataFromFireStore> {
       }
       DateTime later = details.date!.add(const Duration(hours: 1));
       globals.select = later;
+      globals.startTime = details.date!;
       globals.start = DateFormat('dd/MM/yyyy HH:mm:00').format(details.date!);
       globals.end = DateFormat('dd/MM/yyyy HH:mm:00').format(later);
+      globals.endTime = later;
     }
 
     return Scaffold(
@@ -250,7 +253,8 @@ class LoadDataFromFireStoreState extends State<LoadDataFromFireStore> {
                       'StartTime': globals.start,
                       'EndTime': globals.end
                     });
-
+                    NotificationService()
+                        .showNotification(1, "LaundroMATE", "Alert!");
                     getDataFromFireStore();
                   },
                   child: const Icon(Icons.add)),
