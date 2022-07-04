@@ -22,7 +22,6 @@ import 'package:collection/collection.dart';
 // String apptName = appt.get('Subject');
 //String name = '';
 // int i_g = 0;
-int index = 0;
 
 class BookingDetails extends StatelessWidget {
   const BookingDetails({Key? key}) : super(key: key);
@@ -287,9 +286,9 @@ class LoadDataFromFireStoreState extends State<LoadDataFromFireStore> {
   void calendarTapped(CalendarTapDetails details) async {
     if (details.targetElement == CalendarElement.appointment ||
         details.targetElement == CalendarElement.agenda) {
-      //String appt = events!.getSubject(0);
       //int appt = details.targetElement.index;
       int index = details.targetElement.index;
+      String appt = events!.getSubject(index);
       //DateTime appt = events!.getEndTime(0);
       if (true) {
         showDialog(
@@ -307,7 +306,7 @@ class LoadDataFromFireStoreState extends State<LoadDataFromFireStore> {
 
                       Navigator.of(context).pop();
                     },
-                    child: Text('Message $index'),
+                    child: Text('Message $appt'),
                   ),
                   TextButton(
                     onPressed: () {
