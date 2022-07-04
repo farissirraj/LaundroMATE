@@ -13,14 +13,16 @@ import 'main.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'globals.dart' as globals;
+import 'package:collection/collection.dart';
 
 // DocumentSnapshot appt = FirebaseFirestore.instance
 //     .collection('RC4')
 //     .doc(globals.start)
 //     .get() as DocumentSnapshot<Object?>;
 // String apptName = appt.get('Subject');
-String name = '';
+//String name = '';
 // int i_g = 0;
+int index = 0;
 
 class BookingDetails extends StatelessWidget {
   const BookingDetails({Key? key}) : super(key: key);
@@ -100,7 +102,6 @@ class LoadDataFromFireStoreState extends State<LoadDataFromFireStore> {
           setState(() {
             int index = events!.appointments!
                 .indexWhere((app) => app.key == element.doc.id);
-
             Meeting meeting = events!.appointments![index];
 
             events!.appointments!.remove(meeting);
@@ -118,6 +119,7 @@ class LoadDataFromFireStoreState extends State<LoadDataFromFireStore> {
                 .indexWhere((app) => app.key == element.doc.id);
 
             Meeting meeting = events!.appointments![index];
+
             events!.appointments!.remove(meeting);
             events!.notifyListeners(CalendarDataSourceAction.remove, [meeting]);
           });
@@ -285,24 +287,10 @@ class LoadDataFromFireStoreState extends State<LoadDataFromFireStore> {
   void calendarTapped(CalendarTapDetails details) async {
     if (details.targetElement == CalendarElement.appointment ||
         details.targetElement == CalendarElement.agenda) {
-      //String appt = events!.getSubject(2);
-      //String appt = events!.getSubject(1);
-      // int index =
-      //     events!.appointments!.indexWhere((app) => app.key == element.doc.id);
-      // int collectionLength =
-      //     await fireStoreReference.collection('RC4').snapshots().length;
-      // for (var i = 0; i < collectionLength; i += 1) {
-      //   if ((globals.startTime == events!.getStartTime(i)) &&
-      //       (globals.endTime == events!.getEndTime(i))) {
-      //     i_g = i;
-      //     i = 0;
-      //     break;
-      //   }
-      // }
-      //
-
-      String appt = events!.getSubject(0);
-
+      //String appt = events!.getSubject(0);
+      //int appt = details.targetElement.index;
+      int index = details.targetElement.index;
+      //DateTime appt = events!.getEndTime(0);
       if (true) {
         showDialog(
             context: context,
@@ -319,7 +307,7 @@ class LoadDataFromFireStoreState extends State<LoadDataFromFireStore> {
 
                       Navigator.of(context).pop();
                     },
-                    child: Text('Message $appt'),
+                    child: Text('Message $index'),
                   ),
                   TextButton(
                     onPressed: () {
