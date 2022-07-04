@@ -1,17 +1,17 @@
 // ignore_for_file: unnecessary_const
 
-import 'package:awesome_notifications/awesome_notifications.dart';
+// import 'package:awesome_notifications/awesome_notifications.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'dart:core';
-import 'globals.dart';
+// import 'globals.dart';
 
 import 'homescreen.dart';
 import 'notificationservice.dart';
-import 'settings.dart';
-import 'book.dart';
-import 'statusOne.dart';
-import 'package:flutter_local_notifications/flutter_local_notifications.dart';
+// import 'settings.dart';
+// import 'book.dart';
+// import 'statusOne.dart';
+// import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 
 //import 'generated_plugin_registrant.dart';
 final navigatorKey = GlobalKey<NavigatorState>();

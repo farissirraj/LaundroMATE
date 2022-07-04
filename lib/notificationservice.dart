@@ -1,7 +1,7 @@
-import 'package:flutter/material.dart';
+// import 'package:flutter/material.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:timezone/timezone.dart' as tz;
-import 'package:timezone/data/latest.dart' as tz;
+// import 'package:timezone/data/latest.dart' as tz;
 import 'globals.dart' as globals;
 
 class NotificationService {
@@ -19,7 +19,7 @@ class NotificationService {
 
   Future<void> initNotification() async {
     // Android initialization
-    final AndroidInitializationSettings initializationSettingsAndroid =
+    const AndroidInitializationSettings initializationSettingsAndroid =
         AndroidInitializationSettings('@mipmap/ic_launcher');
 
     // ios initialization
@@ -30,7 +30,7 @@ class NotificationService {
       requestSoundPermission: false,
     );
 
-    final InitializationSettings initializationSettings =
+    const InitializationSettings initializationSettings =
         InitializationSettings(
             android: initializationSettingsAndroid,
             iOS: initializationSettingsIOS);
@@ -43,8 +43,9 @@ class NotificationService {
       id,
       title,
       body,
-      tz.TZDateTime.now(tz.local).add(const Duration(
-          seconds: 5)), //schedule the notification to show after 2 seconds.
+      tz.TZDateTime.now(tz.local).add(Duration(
+          seconds: globals
+              .difference)), //schedule the notification to show after 2 seconds.
       const NotificationDetails(
         // Android details
         android: AndroidNotificationDetails('main_channel', 'Main Channel',
@@ -66,5 +67,9 @@ class NotificationService {
       androidAllowWhileIdle:
           true, // To show notification even when the app is closed
     );
+  }
+
+  Future<void> cancelNotifications() async {
+    await flutterLocalNotificationsPlugin.cancel(1);
   }
 }

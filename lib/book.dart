@@ -14,13 +14,13 @@ import 'package:url_launcher/url_launcher.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'globals.dart' as globals;
 
-//String _start = '';
-//String _end = '';
-DocumentSnapshot appt = FirebaseFirestore.instance
-    .collection('RC4')
-    .doc(globals.start)
-    .get() as DocumentSnapshot<Object?>;
-String apptName = appt.get('Subject');
+// DocumentSnapshot appt = FirebaseFirestore.instance
+//     .collection('RC4')
+//     .doc(globals.start)
+//     .get() as DocumentSnapshot<Object?>;
+// String apptName = appt.get('Subject');
+String name = '';
+// int i_g = 0;
 
 class BookingDetails extends StatelessWidget {
   const BookingDetails({Key? key}) : super(key: key);
@@ -71,7 +71,7 @@ class LoadDataFromFireStoreState extends State<LoadDataFromFireStore> {
   void initState() {
     _initializeEventColor();
     getDataFromFireStore().then((results) {
-      SchedulerBinding.instance!.addPostFrameCallback((timeStamp) {
+      SchedulerBinding.instance.addPostFrameCallback((timeStamp) {
         setState(() {});
       });
     });
@@ -157,23 +157,6 @@ class LoadDataFromFireStoreState extends State<LoadDataFromFireStore> {
     String _text = DateFormat('dd/MM/yyyy HH:mm:00').format(now);
     //String _text = '';
 
-    //for widget testing
-    // void selectionChanged(CalendarSelectionDetails details) {
-    //   //DateTime dt;
-    //   if (_controller.view == CalendarView.month ||
-    //       _controller.view == CalendarView.timelineMonth) {
-    //     _text = DateFormat('dd/MM/yyyy HH:mm:00').format(details.date!);
-    //     DateTime later = details.date!.add(const Duration(hours: 1));
-    //     _start = DateFormat('dd/MM/yyyy HH:mm:00').format(details.date!);
-    //     _end = DateFormat('dd/MM/yyyy HH:mm:00').format(later);
-    //   } else {
-    //     //_text = DateFormat('dd/MM/yyyy HH:mm:00').format(details.date!);
-    //     _start = DateFormat('dd/MM/yyyy HH:mm:00').format(now);
-    //     DateTime later = now.add(const Duration(hours: 1));
-    //     _end = DateFormat('dd/MM/yyyy HH:mm:00').format(later);
-    //   }
-    // }
-
     //what works
     void selectionChanged(CalendarSelectionDetails details) {
       //DateTime dt;
@@ -247,9 +230,11 @@ class LoadDataFromFireStoreState extends State<LoadDataFromFireStore> {
                   key: const Key("AddButton"),
                   backgroundColor: const Color.fromRGBO(0, 74, 173, 2),
                   onPressed: () {
-                    fireStoreReference.collection('RC4').doc(globals.name).set({
-                      'Subject': globals.telegram,
-                      'Name': globals.name,
+                    fireStoreReference
+                        .collection('RC4')
+                        .doc(globals.telegram)
+                        .set({
+                      'Subject': globals.name,
                       'StartTime': globals.start,
                       'EndTime': globals.end
                     });
@@ -266,8 +251,8 @@ class LoadDataFromFireStoreState extends State<LoadDataFromFireStore> {
         ));
   }
 
-  void delete(String name, String telegram) {
-    fireStoreReference.collection('RC4').doc(globals.telegram).delete();
+  void delete(String telegram) {
+    fireStoreReference.collection('RC4').doc(telegram).delete();
   }
 
   void deleteStatus(String name, String telegram) {
@@ -300,10 +285,23 @@ class LoadDataFromFireStoreState extends State<LoadDataFromFireStore> {
   void calendarTapped(CalendarTapDetails details) async {
     if (details.targetElement == CalendarElement.appointment ||
         details.targetElement == CalendarElement.agenda) {
-      //check if the appointment is yours
-      DocumentSnapshot appt =
-          await fireStoreReference.collection('RC4').doc(globals.start).get();
-      String apptName = appt.get('Subject');
+      //String appt = events!.getSubject(2);
+      //String appt = events!.getSubject(1);
+      // int index =
+      //     events!.appointments!.indexWhere((app) => app.key == element.doc.id);
+      // int collectionLength =
+      //     await fireStoreReference.collection('RC4').snapshots().length;
+      // for (var i = 0; i < collectionLength; i += 1) {
+      //   if ((globals.startTime == events!.getStartTime(i)) &&
+      //       (globals.endTime == events!.getEndTime(i))) {
+      //     i_g = i;
+      //     i = 0;
+      //     break;
+      //   }
+      // }
+      //
+
+      String appt = events!.getSubject(0);
 
       if (true) {
         showDialog(
@@ -321,11 +319,11 @@ class LoadDataFromFireStoreState extends State<LoadDataFromFireStore> {
 
                       Navigator.of(context).pop();
                     },
-                    child: Text('Message $apptName'),
+                    child: Text('Message $appt'),
                   ),
                   TextButton(
                     onPressed: () {
-                      delete(name, telegram);
+                      delete(globals.telegram);
                       Navigator.of(context).pop();
                       getDataFromFireStore();
                     },
@@ -351,93 +349,6 @@ class LoadDataFromFireStoreState extends State<LoadDataFromFireStore> {
     }
   }
 
-  /*
-  void calendarTapped(CalendarTapDetails details) async {
-    DocumentSnapshot appt =
-        await fireStoreReference.collection('RC4').doc(globals.telegram).get();
-    String apptName = appt.get('Subject');
-
-    if ((details.targetElement == CalendarElement.appointment ||
-        details.targetElement == CalendarElement.agenda)) {
-      //check if the appointment is yours
-      if (true) {
-        showDialog(
-            context: context,
-            builder: (BuildContext context) {
-              return AlertDialog(
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(10),
-                ),
-                title: const Text('Options:'),
-                actions: <Widget>[
-                  TextButton(
-                    onPressed: () {
-                      launchUrl(Uri.parse("https://t.me/$telegram"));
-
-                      Navigator.of(context).pop();
-                    },
-                    child: Text('Message $name'),
-                  ),
-                  TextButton(
-                    onPressed: () {
-                      delete(name, telegram);
-                      Navigator.of(context).pop();
-                      getDataFromFireStore();
-                    },
-                    child: const Text('Delete Appointment'),
-                  ),
-                  TextButton(
-                    onPressed: () {
-                      checkIfDocExists();
-                      Navigator.of(context).pop();
-                      getDataFromFireStore();
-                    },
-                    child: const Text('Started/Finished'),
-                  ),
-                  TextButton(
-                    onPressed: () => Navigator.of(context).pop(),
-                    child: const Text('Cancel'),
-                  ),
-                ],
-              );
-            });
-      } else {
-        showDialog(
-            context: context,
-            builder: (BuildContext context) {
-              return AlertDialog(
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(10),
-                ),
-                title: const Text('Options:'),
-                actions: <Widget>[
-                  TextButton(
-                    onPressed: () {
-                      launchUrl(Uri.parse("https://t.me/$telegram"));
-
-                      Navigator.of(context).pop();
-                    },
-                    child: Text('Message $name'),
-                  ),
-                  TextButton(
-                    onPressed: () {
-                      checkIfDocExists();
-                      Navigator.of(context).pop();
-                      getDataFromFireStore();
-                    },
-                    child: const Text('Started/Finished'),
-                  ),
-                  TextButton(
-                    onPressed: () => Navigator.of(context).pop(),
-                    child: const Text('Cancel'),
-                  ),
-                ],
-              );
-            });
-      }
-    }
-  }
-*/
   void _initializeEventColor() {
     _colorCollection.add(const Color(0xFF0F8644));
     _colorCollection.add(const Color(0xFF8B1FA9));
