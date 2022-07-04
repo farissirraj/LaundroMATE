@@ -1,15 +1,12 @@
-//import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'dart:core';
-//import 'globals.dart';
-
 import 'settings.dart';
 import 'book.dart';
-import 'statusOne.dart';
+import 'status.dart';
 
 class MyApp extends StatelessWidget {
   const MyApp({Key? key}) : super(key: key);
-  // This widget is the root of your application.
+
   @override
   Widget build(BuildContext context) {
     return MaterialApp(home: const HomePage(), routes: <String, WidgetBuilder>{
@@ -29,8 +26,7 @@ class HomePage extends StatelessWidget {
         backgroundColor: const Color.fromRGBO(0, 74, 173, 2),
         body: Center(
             child: Column(children: <Widget>[
-          // ignore: avoid_unnecessary_containers
-          Container(child: const Image(image: AssetImage('assets/logo.png'))),
+          const Image(image: AssetImage('assets/logo.png')),
           SizedBox(
             width: 280.0,
             height: 50.0,
