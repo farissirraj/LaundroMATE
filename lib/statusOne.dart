@@ -1,18 +1,19 @@
 // ignore_for_file: prefer_const_constructors, prefer_const_literals_to_create_immutables
 
 import 'package:flutter/material.dart';
-import 'book.dart';
-import 'dart:math';
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:firebase_core/firebase_core.dart';
-import 'package:flutter/material.dart';
-import 'package:flutter/scheduler.dart';
-import 'package:syncfusion_flutter_calendar/calendar.dart';
-import 'package:intl/intl.dart';
-import 'settings.dart';
-import 'main.dart';
-import 'package:url_launcher/url_launcher.dart';
-import 'package:firebase_auth/firebase_auth.dart';
+
+// import 'book.dart';
+// import 'dart:math';
+// import 'package:firebase_core/firebase_core.dart';
+// import 'package:flutter/material.dart';
+// import 'package:flutter/scheduler.dart';
+// import 'package:syncfusion_flutter_calendar/calendar.dart';
+// import 'package:intl/intl.dart';
+// import 'settings.dart';
+// import 'main.dart';
+// import 'package:url_launcher/url_launcher.dart';
+// import 'package:firebase_auth/firebase_auth.dart';
 import 'globals.dart' as globals;
 
 //int status = 0;
@@ -30,13 +31,6 @@ class StatusOne extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    // if (globals.status == 1) {
-    //   globals.wmPath = 'assets/wm_green.png';
-    //   globals.dPath = 'assets/dryer_red.png';
-    // } else {
-    //   globals.wmPath = 'assets/wm_red.png';
-    //   globals.dPath = 'assets/dryer_green.png';
-    // }
     return Scaffold(
         appBar: AppBar(
           title: const Text('S T A T U S'),

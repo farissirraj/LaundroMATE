@@ -1,7 +1,7 @@
-import 'package:firebase_core/firebase_core.dart';
+//import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'dart:core';
-import 'globals.dart';
+//import 'globals.dart';
 
 import 'settings.dart';
 import 'book.dart';
@@ -54,8 +54,8 @@ class HomePage extends StatelessWidget {
             child: ElevatedButton(
                 child: const Text(
                   'S E T T I N G S',
-                  style: const TextStyle(
-                      fontSize: 20, color: const Color.fromARGB(255, 0, 0, 0)),
+                  style: TextStyle(
+                      fontSize: 20, color: Color.fromARGB(255, 0, 0, 0)),
                 ),
                 style: ElevatedButton.styleFrom(
                   primary: Colors.white,

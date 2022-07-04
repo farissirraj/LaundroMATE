@@ -5,6 +5,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/scheduler.dart';
+import 'package:laundromate/notificationservice.dart';
 import 'package:syncfusion_flutter_calendar/calendar.dart';
 import 'package:intl/intl.dart';
 import 'settings.dart';
@@ -12,9 +13,16 @@ import 'main.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'globals.dart' as globals;
+import 'package:collection/collection.dart';
 
-//String _start = '';
-//String _end = '';
+// DocumentSnapshot appt = FirebaseFirestore.instance
+//     .collection('RC4')
+//     .doc(globals.start)
+//     .get() as DocumentSnapshot<Object?>;
+// String apptName = appt.get('Subject');
+//String name = '';
+// int i_g = 0;
+int index = 0;
 
 class BookingDetails extends StatelessWidget {
   const BookingDetails({Key? key}) : super(key: key);
@@ -65,7 +73,7 @@ class LoadDataFromFireStoreState extends State<LoadDataFromFireStore> {
   void initState() {
     _initializeEventColor();
     getDataFromFireStore().then((results) {
-      SchedulerBinding.instance!.addPostFrameCallback((timeStamp) {
+      SchedulerBinding.instance.addPostFrameCallback((timeStamp) {
         setState(() {});
       });
     });
@@ -94,7 +102,6 @@ class LoadDataFromFireStoreState extends State<LoadDataFromFireStore> {
           setState(() {
             int index = events!.appointments!
                 .indexWhere((app) => app.key == element.doc.id);
-
             Meeting meeting = events!.appointments![index];
 
             events!.appointments!.remove(meeting);
@@ -112,6 +119,7 @@ class LoadDataFromFireStoreState extends State<LoadDataFromFireStore> {
                 .indexWhere((app) => app.key == element.doc.id);
 
             Meeting meeting = events!.appointments![index];
+
             events!.appointments!.remove(meeting);
             events!.notifyListeners(CalendarDataSourceAction.remove, [meeting]);
           });
@@ -151,23 +159,6 @@ class LoadDataFromFireStoreState extends State<LoadDataFromFireStore> {
     String _text = DateFormat('dd/MM/yyyy HH:mm:00').format(now);
     //String _text = '';
 
-    //for widget testing
-    // void selectionChanged(CalendarSelectionDetails details) {
-    //   //DateTime dt;
-    //   if (_controller.view == CalendarView.month ||
-    //       _controller.view == CalendarView.timelineMonth) {
-    //     _text = DateFormat('dd/MM/yyyy HH:mm:00').format(details.date!);
-    //     DateTime later = details.date!.add(const Duration(hours: 1));
-    //     _start = DateFormat('dd/MM/yyyy HH:mm:00').format(details.date!);
-    //     _end = DateFormat('dd/MM/yyyy HH:mm:00').format(later);
-    //   } else {
-    //     //_text = DateFormat('dd/MM/yyyy HH:mm:00').format(details.date!);
-    //     _start = DateFormat('dd/MM/yyyy HH:mm:00').format(now);
-    //     DateTime later = now.add(const Duration(hours: 1));
-    //     _end = DateFormat('dd/MM/yyyy HH:mm:00').format(later);
-    //   }
-    // }
-
     //what works
     void selectionChanged(CalendarSelectionDetails details) {
       //DateTime dt;
@@ -178,8 +169,11 @@ class LoadDataFromFireStoreState extends State<LoadDataFromFireStore> {
         _text = DateFormat('dd/MM/yyyy HH:mm:00').format(details.date!);
       }
       DateTime later = details.date!.add(const Duration(hours: 1));
+      globals.select = later;
+      globals.startTime = details.date!;
       globals.start = DateFormat('dd/MM/yyyy HH:mm:00').format(details.date!);
       globals.end = DateFormat('dd/MM/yyyy HH:mm:00').format(later);
+      globals.endTime = later;
     }
 
     return Scaffold(
@@ -246,7 +240,8 @@ class LoadDataFromFireStoreState extends State<LoadDataFromFireStore> {
                       'StartTime': globals.start,
                       'EndTime': globals.end
                     });
-
+                    NotificationService().showNotification(1, "LaundroMATE",
+                        "Your Laundry Appointment is approaching!");
                     getDataFromFireStore();
                   },
                   child: const Icon(Icons.add)),
@@ -258,8 +253,8 @@ class LoadDataFromFireStoreState extends State<LoadDataFromFireStore> {
         ));
   }
 
-  void delete(String name, String telegram) {
-    fireStoreReference.collection('RC4').doc(globals.telegram).delete();
+  void delete(String telegram) {
+    fireStoreReference.collection('RC4').doc(telegram).delete();
   }
 
   void deleteStatus(String name, String telegram) {
@@ -292,7 +287,10 @@ class LoadDataFromFireStoreState extends State<LoadDataFromFireStore> {
   void calendarTapped(CalendarTapDetails details) async {
     if (details.targetElement == CalendarElement.appointment ||
         details.targetElement == CalendarElement.agenda) {
-      //check if the appointment is yours
+      //String appt = events!.getSubject(0);
+      //int appt = details.targetElement.index;
+      int index = details.targetElement.index;
+      //DateTime appt = events!.getEndTime(0);
       if (true) {
         showDialog(
             context: context,
@@ -309,11 +307,11 @@ class LoadDataFromFireStoreState extends State<LoadDataFromFireStore> {
 
                       Navigator.of(context).pop();
                     },
-                    child: Text('Message $name'),
+                    child: Text('Message $index'),
                   ),
                   TextButton(
                     onPressed: () {
-                      delete(name, telegram);
+                      delete(globals.telegram);
                       Navigator.of(context).pop();
                       getDataFromFireStore();
                     },
@@ -322,6 +320,7 @@ class LoadDataFromFireStoreState extends State<LoadDataFromFireStore> {
                   TextButton(
                     onPressed: () {
                       checkIfDocExists();
+                      NotificationService().cancelNotifications();
                       Navigator.of(context).pop();
                       getDataFromFireStore();
                     },
@@ -338,93 +337,6 @@ class LoadDataFromFireStoreState extends State<LoadDataFromFireStore> {
     }
   }
 
-  /*
-  void calendarTapped(CalendarTapDetails details) async {
-    DocumentSnapshot appt =
-        await fireStoreReference.collection('RC4').doc(globals.telegram).get();
-    String apptName = appt.get('Subject');
-
-    if ((details.targetElement == CalendarElement.appointment ||
-        details.targetElement == CalendarElement.agenda)) {
-      //check if the appointment is yours
-      if (true) {
-        showDialog(
-            context: context,
-            builder: (BuildContext context) {
-              return AlertDialog(
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(10),
-                ),
-                title: const Text('Options:'),
-                actions: <Widget>[
-                  TextButton(
-                    onPressed: () {
-                      launchUrl(Uri.parse("https://t.me/$telegram"));
-
-                      Navigator.of(context).pop();
-                    },
-                    child: Text('Message $name'),
-                  ),
-                  TextButton(
-                    onPressed: () {
-                      delete(name, telegram);
-                      Navigator.of(context).pop();
-                      getDataFromFireStore();
-                    },
-                    child: const Text('Delete Appointment'),
-                  ),
-                  TextButton(
-                    onPressed: () {
-                      checkIfDocExists();
-                      Navigator.of(context).pop();
-                      getDataFromFireStore();
-                    },
-                    child: const Text('Started/Finished'),
-                  ),
-                  TextButton(
-                    onPressed: () => Navigator.of(context).pop(),
-                    child: const Text('Cancel'),
-                  ),
-                ],
-              );
-            });
-      } else {
-        showDialog(
-            context: context,
-            builder: (BuildContext context) {
-              return AlertDialog(
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(10),
-                ),
-                title: const Text('Options:'),
-                actions: <Widget>[
-                  TextButton(
-                    onPressed: () {
-                      launchUrl(Uri.parse("https://t.me/$telegram"));
-
-                      Navigator.of(context).pop();
-                    },
-                    child: Text('Message $name'),
-                  ),
-                  TextButton(
-                    onPressed: () {
-                      checkIfDocExists();
-                      Navigator.of(context).pop();
-                      getDataFromFireStore();
-                    },
-                    child: const Text('Started/Finished'),
-                  ),
-                  TextButton(
-                    onPressed: () => Navigator.of(context).pop(),
-                    child: const Text('Cancel'),
-                  ),
-                ],
-              );
-            });
-      }
-    }
-  }
-*/
   void _initializeEventColor() {
     _colorCollection.add(const Color(0xFF0F8644));
     _colorCollection.add(const Color(0xFF8B1FA9));
