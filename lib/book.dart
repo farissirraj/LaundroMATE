@@ -1,27 +1,18 @@
-// ignore_for_file: avoid_function_literals_in_foreach_calls, unused_import
+// ignore_for_file: avoid_function_literals_in_foreach_calls
 
 import 'dart:math';
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/scheduler.dart';
 import 'package:laundromate/notificationservice.dart';
 import 'package:syncfusion_flutter_calendar/calendar.dart';
 import 'package:intl/intl.dart';
-import 'settings.dart';
-import 'main.dart';
 import 'package:url_launcher/url_launcher.dart';
-import 'package:firebase_auth/firebase_auth.dart';
 import 'globals.dart' as globals;
-import 'package:collection/collection.dart';
 
-// DocumentSnapshot appt = FirebaseFirestore.instance
-//     .collection('RC4')
-//     .doc(globals.start)
-//     .get() as DocumentSnapshot<Object?>;
-// String apptName = appt.get('Subject');
-//String name = '';
-// int i_g = 0;
+_goBack(BuildContext context) {
+  Navigator.pop(context);
+}
 
 class BookingDetails extends StatelessWidget {
   const BookingDetails({Key? key}) : super(key: key);
@@ -38,7 +29,7 @@ class BookingDetails extends StatelessWidget {
   }
 }
 
-//get appts from the database
+//Loads Appointments from Firestore db
 class LoadDataFromFireBase extends StatelessWidget {
   const LoadDataFromFireBase({Key? key}) : super(key: key);
 
@@ -62,7 +53,6 @@ class LoadDataFromFireStore extends StatefulWidget {
 class LoadDataFromFireStoreState extends State<LoadDataFromFireStore> {
   final List<Color> _colorCollection = <Color>[];
   MeetingDataSource? events;
-  //final List<String> options = <String>['Add', 'Delete', 'Update'];
   final fireStoreReference = FirebaseFirestore.instance;
   bool isInitialLoaded = false;
 
@@ -147,25 +137,17 @@ class LoadDataFromFireStoreState extends State<LoadDataFromFireStore> {
     });
   }
 
-  _goBack(BuildContext context) {
-    Navigator.pop(context);
-  }
-
   @override
   Widget build(BuildContext context) {
-    //isInitialLoaded = true;
     DateTime now = DateTime.now();
-    String _text = DateFormat('dd/MM/yyyy HH:mm:00').format(now);
-    //String _text = '';
+    globals.temp = DateFormat('dd/MM/yyyy HH:mm:00').format(now);
 
-    //what works
     void selectionChanged(CalendarSelectionDetails details) {
-      //DateTime dt;
       if (_controller.view == CalendarView.month ||
           _controller.view == CalendarView.timelineMonth) {
-        _text = DateFormat('dd/MM/yyyy HH:mm:00').format(details.date!);
+        globals.temp = DateFormat('dd/MM/yyyy HH:mm:00').format(details.date!);
       } else {
-        _text = DateFormat('dd/MM/yyyy HH:mm:00').format(details.date!);
+        globals.temp = DateFormat('dd/MM/yyyy HH:mm:00').format(details.date!);
       }
       DateTime later = details.date!.add(const Duration(hours: 1));
       globals.select = later;
@@ -173,6 +155,10 @@ class LoadDataFromFireStoreState extends State<LoadDataFromFireStore> {
       globals.start = DateFormat('dd/MM/yyyy HH:mm:00').format(details.date!);
       globals.end = DateFormat('dd/MM/yyyy HH:mm:00').format(later);
       globals.endTime = later;
+    }
+
+    void delete(String telegram) {
+      fireStoreReference.collection('RC4').doc(telegram).delete();
     }
 
     return Scaffold(
@@ -210,11 +196,75 @@ class LoadDataFromFireStoreState extends State<LoadDataFromFireStore> {
           child: Column(
             children: <Widget>[
               const SizedBox(
-                height: 550,
+                height: 500,
+              ),
+
+              //Delete Appointment Button
+              FloatingActionButton(
+                heroTag: null,
+                key: const Key("DeleteButton"),
+                backgroundColor: const Color.fromRGBO(0, 74, 173, 2),
+                onPressed: () {
+                  String appointmentSlot = globals.appointment;
+                  if (globals.appointment == '') {
+                    showDialog(
+                        context: context,
+                        builder: (BuildContext context) {
+                          return AlertDialog(
+                              shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(10),
+                              ),
+                              title: const Text('Alert!'),
+                              content: const Text(
+                                  'You do not have a laundry booking!'),
+                              actions: <Widget>[
+                                TextButton(
+                                  child: const Text('Cancel'),
+                                  onPressed: () {
+                                    _goBack(context);
+                                  },
+                                )
+                              ]);
+                        });
+                  } else {
+                    showDialog(
+                        context: context,
+                        builder: (BuildContext context) {
+                          return AlertDialog(
+                              shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(10),
+                              ),
+                              title: const Text('Alert!'),
+                              content: Text(
+                                  'Are you sure you want to delete your laundry slot on $appointmentSlot'),
+                              actions: <Widget>[
+                                TextButton(
+                                    child: const Text('Delete'),
+                                    onPressed: () {
+                                      delete(globals.telegram);
+                                      globals.appointment = '';
+                                      _goBack(context);
+                                      getDataFromFireStore();
+                                    }),
+                                TextButton(
+                                  child: const Text('Cancel'),
+                                  onPressed: () {
+                                    _goBack(context);
+                                  },
+                                )
+                              ]);
+                        });
+                  }
+                },
+                child: const Icon(Icons.delete),
+              ),
+              const SizedBox(
+                height: 10,
               ),
 
               //Refresh Calendar Button
               FloatingActionButton(
+                heroTag: null,
                 key: const Key("RefreshButton"),
                 backgroundColor: const Color.fromRGBO(0, 74, 173, 2),
                 onPressed: () {
@@ -228,6 +278,7 @@ class LoadDataFromFireStoreState extends State<LoadDataFromFireStore> {
 
               //Add Appointment Button
               FloatingActionButton(
+                  heroTag: null,
                   key: const Key("AddButton"),
                   backgroundColor: const Color.fromRGBO(0, 74, 173, 2),
                   onPressed: () {
@@ -239,8 +290,9 @@ class LoadDataFromFireStoreState extends State<LoadDataFromFireStore> {
                       'StartTime': globals.start,
                       'EndTime': globals.end
                     });
-                    NotificationService().showNotification(1, "LaundroMATE",
-                        "Your Laundry Appointment is approaching!");
+                    globals.appointment = globals.start;
+                    // NotificationService().showNotification(1, "LaundroMATE",
+                    //     "Your Laundry Appointment is approaching!");
                     getDataFromFireStore();
                   },
                   child: const Icon(Icons.add)),
@@ -252,15 +304,7 @@ class LoadDataFromFireStoreState extends State<LoadDataFromFireStore> {
         ));
   }
 
-  void delete(String telegram) {
-    fireStoreReference.collection('RC4').doc(telegram).delete();
-  }
-
-  void deleteStatus(String name, String telegram) {
-    fireStoreReference.collection('LaundryRC4').doc('status').delete();
-  }
-
-  checkIfDocExists() async {
+  checkStatus() async {
     DocumentSnapshot ds =
         await fireStoreReference.collection('LaundryRC4').doc('status').get();
     globals.status = ds.get('status');
@@ -282,57 +326,43 @@ class LoadDataFromFireStoreState extends State<LoadDataFromFireStore> {
     }
   }
 
-  //CALENDAR TAPPED FOR CONTACT
+  //Appointment Tapped
   void calendarTapped(CalendarTapDetails details) async {
+    String tele = globals.telegram;
     if (details.targetElement == CalendarElement.appointment ||
         details.targetElement == CalendarElement.agenda) {
-      //int appt = details.targetElement.index;
-      int index = details.targetElement.index;
-      String appt = events!.getSubject(index);
-      //DateTime appt = events!.getEndTime(0);
-      if (true) {
-        showDialog(
-            context: context,
-            builder: (BuildContext context) {
-              return AlertDialog(
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(10),
+      showDialog(
+          context: context,
+          builder: (BuildContext context) {
+            return AlertDialog(
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(10),
+              ),
+              title: const Text('Options:'),
+              actions: <Widget>[
+                TextButton(
+                  onPressed: () {
+                    launchUrl(Uri.parse("https://t.me/$tele"));
+                    _goBack(context);
+                  },
+                  child: const Text('Message'),
                 ),
-                title: const Text('Options:'),
-                actions: <Widget>[
-                  TextButton(
-                    onPressed: () {
-                      launchUrl(Uri.parse("https://t.me/$telegram"));
-
-                      Navigator.of(context).pop();
-                    },
-                    child: Text('Message $appt'),
-                  ),
-                  TextButton(
-                    onPressed: () {
-                      delete(globals.telegram);
-                      Navigator.of(context).pop();
-                      getDataFromFireStore();
-                    },
-                    child: const Text('Delete Appointment'),
-                  ),
-                  TextButton(
-                    onPressed: () {
-                      checkIfDocExists();
-                      NotificationService().cancelNotifications();
-                      Navigator.of(context).pop();
-                      getDataFromFireStore();
-                    },
-                    child: const Text('Started/Finished'),
-                  ),
-                  TextButton(
-                    onPressed: () => Navigator.of(context).pop(),
-                    child: const Text('Cancel'),
-                  ),
-                ],
-              );
-            });
-      }
+                TextButton(
+                  onPressed: () {
+                    checkStatus();
+                    NotificationService().cancelNotifications();
+                    _goBack(context);
+                    getDataFromFireStore();
+                  },
+                  child: const Text('Started/Finished'),
+                ),
+                TextButton(
+                  onPressed: () => _goBack(context),
+                  child: const Text('Cancel'),
+                ),
+              ],
+            );
+          });
     }
   }
 

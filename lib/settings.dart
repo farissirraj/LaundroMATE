@@ -1,14 +1,6 @@
-// ignore_for_file: prefer_const_constructors
-
-//import 'dart:ffi';
 import 'package:cloud_firestore/cloud_firestore.dart';
-//import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
-//import 'book.dart';
 import 'globals.dart' as globals;
-
-String name = 'Sirraj';
-String telegram = 'sirraj09';
 
 class Settings extends StatelessWidget {
   Settings({Key? key}) : super(key: key);
@@ -29,7 +21,7 @@ class Settings extends StatelessWidget {
         children: [
           // N A M E
           Padding(
-              padding: EdgeInsets.all(20.0),
+              padding: const EdgeInsets.all(20.0),
               child: TextField(
                 controller: _nameController,
                 decoration: InputDecoration(
@@ -37,7 +29,7 @@ class Settings extends StatelessWidget {
                   labelText: "Name",
                 ),
               )),
-          Padding(padding: EdgeInsets.all(0.5)),
+          const Padding(padding: EdgeInsets.all(0.5)),
           SizedBox(
             width: 350.0,
             child: FloatingActionButton.extended(
@@ -45,15 +37,15 @@ class Settings extends StatelessWidget {
                 showDialog(
                   context: context,
                   builder: (context) => AlertDialog(
-                      title: Text('Is this your email?'),
+                      title: const Text('Is this your email?'),
                       content: Text(
                         _nameController.text,
                         textAlign: TextAlign.center,
-                        style: TextStyle(fontSize: 20),
+                        style: const TextStyle(fontSize: 20),
                       ),
                       actions: [
                         TextButton(
-                          child: Text('Yes'),
+                          child: const Text('Yes'),
                           onPressed: () {
                             globals.name = _nameController.text;
                             Navigator.pop(context);
@@ -62,16 +54,16 @@ class Settings extends StatelessWidget {
                       ]),
                 );
               },
-              label: Text('UPDATE NAME'),
-              icon: Icon(Icons.save),
-              backgroundColor: Color.fromRGBO(0, 74, 173, 2),
+              label: const Text('UPDATE NAME'),
+              icon: const Icon(Icons.save),
+              backgroundColor: const Color.fromRGBO(0, 74, 173, 2),
             ),
           ),
-          Padding(padding: EdgeInsets.all(5)),
+          const Padding(padding: EdgeInsets.all(5)),
 
           // T E L E G R A M  H A N D L E
           Padding(
-              padding: EdgeInsets.all(20.0),
+              padding: const EdgeInsets.all(20.0),
               child: TextField(
                 controller: _telegramController,
                 decoration: InputDecoration(
@@ -80,7 +72,7 @@ class Settings extends StatelessWidget {
                 ),
               )),
 
-          Padding(padding: EdgeInsets.all(0.5)),
+          const Padding(padding: EdgeInsets.all(0.5)),
 
           SizedBox(
             width: 350.0,
@@ -89,15 +81,15 @@ class Settings extends StatelessWidget {
                 showDialog(
                   context: context,
                   builder: (context) => AlertDialog(
-                      title: Text('Is this your Telegram Handle?'),
+                      title: const Text('Is this your Telegram Handle?'),
                       content: Text(
                         _telegramController.text,
                         textAlign: TextAlign.center,
-                        style: TextStyle(fontSize: 20),
+                        style: const TextStyle(fontSize: 20),
                       ),
                       actions: [
                         TextButton(
-                          child: Text('Yes'),
+                          child: const Text('Yes'),
                           onPressed: () {
                             fireStoreReference
                                 .collection('RC4')
@@ -121,7 +113,7 @@ class Settings extends StatelessWidget {
                                           onPressed: () {
                                             Navigator.of(context).pop();
                                           },
-                                          child: Text('Okay!'))
+                                          child: const Text('Okay!'))
                                     ],
                                   );
                                 });
@@ -130,12 +122,12 @@ class Settings extends StatelessWidget {
                       ]),
                 );
               },
-              label: Text('UPDATE TELEGRAM HANDLE'),
-              icon: Icon(Icons.save),
-              backgroundColor: Color.fromRGBO(0, 74, 173, 2),
+              label: const Text('UPDATE TELEGRAM HANDLE'),
+              icon: const Icon(Icons.save),
+              backgroundColor: const Color.fromRGBO(0, 74, 173, 2),
             ),
           ),
-          Padding(padding: EdgeInsets.all(5)),
+          const Padding(padding: EdgeInsets.all(5)),
         ],
       ),
     );
