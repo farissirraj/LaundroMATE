@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:laundromate/onboarding.dart';
 import 'dart:core';
 import 'settings.dart';
 import 'book.dart';
@@ -9,11 +10,13 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(home: const HomePage(), routes: <String, WidgetBuilder>{
-      '/book': (context) => const LoadDataFromFireBase(),
-      '/settings': (context) => Settings(),
-      '/status': (context) => const StatusOne()
-    });
+    return MaterialApp(
+        home: OnboardingScreen(),
+        routes: <String, WidgetBuilder>{
+          '/book': (context) => const LoadDataFromFireBase(),
+          '/settings': (context) => Settings(),
+          '/status': (context) => const StatusOne()
+        });
   }
 }
 
