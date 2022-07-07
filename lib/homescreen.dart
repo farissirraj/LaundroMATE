@@ -37,7 +37,7 @@ class HomePage extends StatelessWidget {
                       fontSize: 20, color: Color.fromARGB(255, 0, 0, 0)),
                 ),
                 style: ElevatedButton.styleFrom(
-                  primary: Colors.white,
+                  backgroundColor: Colors.white,
                 ),
                 onPressed: () {
                   Navigator.pushNamed(context, '/book');
@@ -54,7 +54,7 @@ class HomePage extends StatelessWidget {
                       fontSize: 20, color: Color.fromARGB(255, 0, 0, 0)),
                 ),
                 style: ElevatedButton.styleFrom(
-                  primary: Colors.white,
+                  backgroundColor: Colors.white,
                 ),
                 onPressed: () {
                   Navigator.pushNamed(context, '/settings');
@@ -71,7 +71,7 @@ class HomePage extends StatelessWidget {
                       fontSize: 20, color: Color.fromARGB(255, 0, 0, 0)),
                 ),
                 style: ElevatedButton.styleFrom(
-                  primary: Colors.white,
+                  backgroundColor: Colors.white,
                 ),
                 onPressed: () {
                   Navigator.pushNamed(context, '/status');
