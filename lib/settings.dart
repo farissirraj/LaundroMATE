@@ -151,7 +151,29 @@ class Settings extends StatelessWidget {
                         TextButton(
                           child: const Text('Yes'),
                           onPressed: () {
+                            fireStoreReference
+                                .collection('RC4')
+                                .doc(globals.telegram)
+                                .delete();
                             Navigator.pop(context);
+                            showDialog(
+                                context: context,
+                                builder: (BuildContext context) {
+                                  return AlertDialog(
+                                    shape: RoundedRectangleBorder(
+                                        borderRadius:
+                                            BorderRadius.circular(10)),
+                                    title: const Text('Alert!'),
+                                    content: const Text('Deleted!'),
+                                    actions: <Widget>[
+                                      TextButton(
+                                          onPressed: () {
+                                            Navigator.of(context).pop();
+                                          },
+                                          child: const Text('Close'))
+                                    ],
+                                  );
+                                });
                           },
                         ),
                         TextButton(
