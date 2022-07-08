@@ -4,6 +4,7 @@ import 'dart:core';
 import 'settings.dart';
 import 'book.dart';
 import 'status.dart';
+import 'main.dart';
 
 class MyApp extends StatelessWidget {
   const MyApp({Key? key}) : super(key: key);
@@ -11,7 +12,7 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-        home: OnboardingScreen(),
+        home: show ? OnboardingScreen() : const HomePage(),
         routes: <String, WidgetBuilder>{
           '/book': (context) => const LoadDataFromFireBase(),
           '/settings': (context) => Settings(),

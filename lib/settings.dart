@@ -1,5 +1,8 @@
+import 'dart:io';
+
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'globals.dart' as globals;
 
 class Settings extends StatelessWidget {
@@ -13,6 +16,11 @@ class Settings extends StatelessWidget {
   Widget build(BuildContext context) {
     void changeHandle(String newHandle) {
       globals.telegram = newHandle;
+    }
+
+    void resetPref(context) async {
+      final prefs = await SharedPreferences.getInstance();
+      await prefs.setBool('Onboarding', true);
     }
 
     return Scaffold(
@@ -155,6 +163,7 @@ class Settings extends StatelessWidget {
                                 .collection('RC4')
                                 .doc(globals.telegram)
                                 .delete();
+                            resetPref(context);
                             Navigator.pop(context);
                             showDialog(
                                 context: context,
