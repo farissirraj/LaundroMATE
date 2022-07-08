@@ -178,6 +178,7 @@ class Settings extends StatelessWidget {
                                       TextButton(
                                           onPressed: () {
                                             Navigator.of(context).pop();
+                                            exit(0);
                                           },
                                           child: const Text('Close'))
                                     ],
