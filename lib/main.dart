@@ -3,6 +3,7 @@
 // import 'package:awesome_notifications/awesome_notifications.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'dart:core';
 // import 'globals.dart';
 
@@ -15,6 +16,8 @@ import 'notificationservice.dart';
 
 //import 'generated_plugin_registrant.dart';
 final navigatorKey = GlobalKey<NavigatorState>();
+
+bool show = true;
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -61,6 +64,9 @@ void main() async {
 
   WidgetsFlutterBinding.ensureInitialized();
   NotificationService().initNotification();
+
+  final prefs = await SharedPreferences.getInstance();
+  show = prefs.getBool('Onboarding') ?? true;
 
   runApp(const MyApp());
 }

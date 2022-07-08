@@ -1,19 +1,23 @@
 import 'package:flutter/material.dart';
+import 'package:laundromate/onboarding.dart';
 import 'dart:core';
 import 'settings.dart';
 import 'book.dart';
 import 'status.dart';
+import 'main.dart';
 
 class MyApp extends StatelessWidget {
   const MyApp({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(home: const HomePage(), routes: <String, WidgetBuilder>{
-      '/book': (context) => const LoadDataFromFireBase(),
-      '/settings': (context) => Settings(),
-      '/status': (context) => const StatusOne()
-    });
+    return MaterialApp(
+        home: show ? OnboardingScreen() : const HomePage(),
+        routes: <String, WidgetBuilder>{
+          '/book': (context) => const LoadDataFromFireBase(),
+          '/settings': (context) => Settings(),
+          '/status': (context) => const StatusOne()
+        });
   }
 }
 
@@ -37,7 +41,7 @@ class HomePage extends StatelessWidget {
                       fontSize: 20, color: Color.fromARGB(255, 0, 0, 0)),
                 ),
                 style: ElevatedButton.styleFrom(
-                  primary: Colors.white,
+                  backgroundColor: Colors.white,
                 ),
                 onPressed: () {
                   Navigator.pushNamed(context, '/book');
@@ -54,7 +58,7 @@ class HomePage extends StatelessWidget {
                       fontSize: 20, color: Color.fromARGB(255, 0, 0, 0)),
                 ),
                 style: ElevatedButton.styleFrom(
-                  primary: Colors.white,
+                  backgroundColor: Colors.white,
                 ),
                 onPressed: () {
                   Navigator.pushNamed(context, '/settings');
@@ -71,7 +75,7 @@ class HomePage extends StatelessWidget {
                       fontSize: 20, color: Color.fromARGB(255, 0, 0, 0)),
                 ),
                 style: ElevatedButton.styleFrom(
-                  primary: Colors.white,
+                  backgroundColor: Colors.white,
                 ),
                 onPressed: () {
                   Navigator.pushNamed(context, '/status');

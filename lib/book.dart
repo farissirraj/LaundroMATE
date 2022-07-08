@@ -289,10 +289,10 @@ class LoadDataFromFireStoreState extends State<LoadDataFromFireStore> {
                       'StartTime': globals.start,
                       'EndTime': globals.end
                     });
+                    getDataFromFireStore();
                     globals.appointment = globals.start;
                     // NotificationService().showNotification(1, "LaundroMATE",
                     //     "Your Laundry Appointment is approaching!");
-                    getDataFromFireStore();
                   },
                   child: const Icon(Icons.add)),
               const SizedBox(

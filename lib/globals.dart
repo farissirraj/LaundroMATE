@@ -1,6 +1,6 @@
 //User Profile
-String name = 'Harry';
-String telegram = 'Harry123';
+String name = '';
+String telegram = '';
 
 //Time Conversions and Management
 String start = '';
