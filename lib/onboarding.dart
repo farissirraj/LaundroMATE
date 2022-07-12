@@ -4,8 +4,8 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'homescreen.dart';
 import 'globals.dart' as globals;
 
-final _OnboardingNameController = TextEditingController();
-final _OnboardingTelegramController = TextEditingController();
+final _onboardingNameController = TextEditingController();
+final _onboardingTelegramController = TextEditingController();
 
 class OnboardingScreen extends StatelessWidget {
   OnboardingScreen({Key? key}) : super(key: key);
@@ -20,7 +20,7 @@ class OnboardingScreen extends StatelessWidget {
           Text(
             'Welcome to',
             style: TextStyle(
-                fontSize: 50,
+                fontSize: 40,
                 fontFamily: 'Kollektif',
                 color: Color.fromRGBO(0, 74, 173, 2)),
           ),
@@ -28,7 +28,7 @@ class OnboardingScreen extends StatelessWidget {
           Text(
             'LaundroMATE',
             style: TextStyle(
-                fontSize: 50,
+                fontSize: 40,
                 fontFamily: 'Kollektif',
                 color: Color.fromRGBO(0, 74, 173, 2)),
           )
@@ -100,13 +100,13 @@ class OnboardingScreen extends StatelessWidget {
           ),
           const SizedBox(height: 5),
           TextField(
-            controller: _OnboardingNameController,
+            controller: _onboardingNameController,
             decoration:
                 const InputDecoration(hintText: 'Name', labelText: 'Name'),
           ),
           const SizedBox(height: 30),
           TextField(
-            controller: _OnboardingTelegramController,
+            controller: _onboardingTelegramController,
             decoration: const InputDecoration(
                 hintText: 'Telegram Handle', labelText: 'Telegram Handle'),
           ),
@@ -151,7 +151,7 @@ class OnboardingScreen extends StatelessWidget {
     await prefs.setBool('Onboarding', false);
     Navigator.pushReplacement(
         context, MaterialPageRoute(builder: (context) => const HomePage()));
-    globals.name = _OnboardingNameController.text;
-    globals.telegram = _OnboardingTelegramController.text;
+    globals.name = _onboardingNameController.text;
+    globals.telegram = _onboardingTelegramController.text;
   }
 }

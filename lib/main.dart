@@ -48,19 +48,18 @@ void main() async {
   ));
 
   //ios
-  /*
-  await Firebase.initializeApp(
-      options: const FirebaseOptions(
-    apiKey: 'AIzaSyBfIkm32b_104BnWzf5UrN1y34ZJ5wRcBE',
-    appId: '1:596845297819:ios:63fd08299b2e8d350a063e',
-    messagingSenderId: '596845297819',
-    projectId: 'laundromate-2e111',
-    storageBucket: 'laundromate-2e111.appspot.com',
-    iosClientId:
-        '596845297819-qlp7mf8aoglmpocoqoa4h94ae011njog.apps.googleusercontent.com',
-    iosBundleId: 'com.example.laundromate',
-  ));
-  */
+
+  // await Firebase.initializeApp(
+  //     options: const FirebaseOptions(
+  //   apiKey: 'AIzaSyBfIkm32b_104BnWzf5UrN1y34ZJ5wRcBE',
+  //   appId: '1:596845297819:ios:63fd08299b2e8d350a063e',
+  //   messagingSenderId: '596845297819',
+  //   projectId: 'laundromate-2e111',
+  //   storageBucket: 'laundromate-2e111.appspot.com',
+  //   iosClientId:
+  //       '596845297819-qlp7mf8aoglmpocoqoa4h94ae011njog.apps.googleusercontent.com',
+  //   iosBundleId: 'com.example.laundromate',
+  // ));
 
   WidgetsFlutterBinding.ensureInitialized();
   NotificationService().initNotification();
