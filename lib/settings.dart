@@ -48,7 +48,7 @@ class Settings extends StatelessWidget {
                 showDialog(
                   context: context,
                   builder: (context) => AlertDialog(
-                      title: const Text('Is this your email?'),
+                      title: const Text('Is this your name?'),
                       content: Text(
                         _nameController.text,
                         textAlign: TextAlign.center,
