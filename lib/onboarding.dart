@@ -131,9 +131,6 @@ class OnboardingScreen extends StatelessWidget {
         done: const Text('Done',
             style:
                 TextStyle(fontSize: 20, color: Color.fromRGBO(0, 74, 173, 2))),
-        //showSkipButton: true,
-        // skip: const Text('Skip',
-        //     style: TextStyle(fontSize: 20, color: Colors.white)),
         showNextButton: true,
         next: const Icon(Icons.arrow_forward,
             size: 30, color: Color.fromRGBO(0, 74, 173, 2)),
@@ -141,7 +138,32 @@ class OnboardingScreen extends StatelessWidget {
         back: const Icon(Icons.arrow_back,
             size: 30, color: Color.fromRGBO(0, 74, 173, 2)),
 
-        onDone: () => onDone(context),
+        onDone: () {
+          if (_onboardingNameController.text == '' ||
+              _onboardingTelegramController.text == '') {
+            showDialog(
+                context: context,
+                builder: (BuildContext context) {
+                  return AlertDialog(
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(10),
+                    ),
+                    title: const Text('Alert!'),
+                    content: const Text('Invalid Name/Telegram Handle'),
+                    actions: <Widget>[
+                      TextButton(
+                        onPressed: () {
+                          Navigator.pop(context);
+                        },
+                        child: const Text('Okay'),
+                      ),
+                    ],
+                  );
+                });
+          } else {
+            onDone(context);
+          }
+        },
       ),
     );
   }
