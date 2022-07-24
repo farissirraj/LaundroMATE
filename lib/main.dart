@@ -2,6 +2,7 @@
 
 // import 'package:awesome_notifications/awesome_notifications.dart';
 
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -10,19 +11,13 @@ import 'globals.dart' as globals;
 
 import 'homescreen.dart';
 import 'notificationservice.dart';
-// import 'settings.dart';
-// import 'book.dart';
-// import 'statusOne.dart';
-// import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 
-//import 'generated_plugin_registrant.dart';
 final navigatorKey = GlobalKey<NavigatorState>();
 
 bool show = true;
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
-  //navigatorKey:
   navigatorKey;
   //web-app
   /*
@@ -71,5 +66,26 @@ void main() async {
   globals.saveProfile();
   globals.fetchPrefs();
 
+  DocumentSnapshot ds = await FirebaseFirestore.instance
+      .collection('LaundryRC4')
+      .doc('status')
+      .get();
+  globals.status = ds.get('status');
+  if (globals.status == 1) {
+    FirebaseFirestore.instance
+        .collection('LaundryRC4')
+        .doc('status')
+        .set({'status': 0});
+    globals.wmPath = 'assets/wm_green.png';
+    globals.dPath = 'assets/dryer_red.png';
+  }
+  if (globals.status == 0) {
+    FirebaseFirestore.instance
+        .collection('LaundryRC4')
+        .doc('status')
+        .set({'status': 1});
+    globals.wmPath = 'assets/wm_red.png';
+    globals.dPath = 'assets/dryer_green.png';
+  }
   runApp(const MyApp());
 }

@@ -8,7 +8,6 @@ import 'package:syncfusion_flutter_calendar/calendar.dart';
 import 'package:intl/intl.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'globals.dart' as globals;
-import 'package:shared_preferences/shared_preferences.dart';
 
 _goBack(BuildContext context) {
   Navigator.pop(context);
