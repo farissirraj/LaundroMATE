@@ -13,6 +13,30 @@ _goBack(BuildContext context) {
   Navigator.pop(context);
 }
 
+void checkStatus() async {
+  DocumentSnapshot ds = await FirebaseFirestore.instance
+      .collection('LaundryRC4')
+      .doc('status')
+      .get();
+  globals.status = ds.get('status');
+  if (globals.status == 1) {
+    FirebaseFirestore.instance
+        .collection('LaundryRC4')
+        .doc('status')
+        .set({'status': 0});
+    globals.wmPath = 'assets/wm_green.png';
+    globals.dPath = 'assets/dryer_red.png';
+  }
+  if (globals.status == 0) {
+    FirebaseFirestore.instance
+        .collection('LaundryRC4')
+        .doc('status')
+        .set({'status': 1});
+    globals.wmPath = 'assets/wm_red.png';
+    globals.dPath = 'assets/dryer_green.png';
+  }
+}
+
 class BookingDetails extends StatelessWidget {
   const BookingDetails({Key? key}) : super(key: key);
   @override
@@ -304,28 +328,6 @@ class LoadDataFromFireStoreState extends State<LoadDataFromFireStore> {
             ],
           ),
         ));
-  }
-
-  checkStatus() async {
-    DocumentSnapshot ds =
-        await fireStoreReference.collection('LaundryRC4').doc('status').get();
-    globals.status = ds.get('status');
-    if (globals.status == 1) {
-      fireStoreReference
-          .collection('LaundryRC4')
-          .doc('status')
-          .set({'status': 0});
-      globals.wmPath = 'assets/wm_green.png';
-      globals.dPath = 'assets/dryer_red.png';
-    }
-    if (globals.status == 0) {
-      fireStoreReference
-          .collection('LaundryRC4')
-          .doc('status')
-          .set({'status': 1});
-      globals.wmPath = 'assets/wm_red.png';
-      globals.dPath = 'assets/dryer_green.png';
-    }
   }
 
   //Appointment Tapped

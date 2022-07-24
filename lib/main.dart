@@ -5,6 +5,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
+import 'package:laundromate/book.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'dart:core';
 import 'globals.dart' as globals;
@@ -66,26 +67,6 @@ void main() async {
   globals.saveProfile();
   globals.fetchPrefs();
 
-  DocumentSnapshot ds = await FirebaseFirestore.instance
-      .collection('LaundryRC4')
-      .doc('status')
-      .get();
-  globals.status = ds.get('status');
-  if (globals.status == 1) {
-    FirebaseFirestore.instance
-        .collection('LaundryRC4')
-        .doc('status')
-        .set({'status': 0});
-    globals.wmPath = 'assets/wm_green.png';
-    globals.dPath = 'assets/dryer_red.png';
-  }
-  if (globals.status == 0) {
-    FirebaseFirestore.instance
-        .collection('LaundryRC4')
-        .doc('status')
-        .set({'status': 1});
-    globals.wmPath = 'assets/wm_red.png';
-    globals.dPath = 'assets/dryer_green.png';
-  }
+  checkStatus();
   runApp(const MyApp());
 }
