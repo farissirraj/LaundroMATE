@@ -171,9 +171,12 @@ class OnboardingScreen extends StatelessWidget {
   void onDone(context) async {
     final prefs = await SharedPreferences.getInstance();
     await prefs.setBool('Onboarding', false);
+
     Navigator.pushReplacement(
         context, MaterialPageRoute(builder: (context) => const HomePage()));
     globals.name = _onboardingNameController.text;
     globals.telegram = _onboardingTelegramController.text;
+    await prefs.setString('Name', _onboardingNameController.text);
+    await prefs.setString('Telegram', _onboardingTelegramController.text);
   }
 }

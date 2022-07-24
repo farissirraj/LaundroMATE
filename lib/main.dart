@@ -1,11 +1,12 @@
 // ignore_for_file: unnecessary_const
 
 // import 'package:awesome_notifications/awesome_notifications.dart';
+
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'dart:core';
-// import 'globals.dart';
+import 'globals.dart' as globals;
 
 import 'homescreen.dart';
 import 'notificationservice.dart';
@@ -66,6 +67,9 @@ void main() async {
 
   final prefs = await SharedPreferences.getInstance();
   show = prefs.getBool('Onboarding') ?? true;
+  //globals.appointment = prefs.getString('appointment');
+  globals.saveProfile();
+  globals.fetchPrefs();
 
   runApp(const MyApp());
 }

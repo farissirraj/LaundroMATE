@@ -8,6 +8,7 @@ import 'package:syncfusion_flutter_calendar/calendar.dart';
 import 'package:intl/intl.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'globals.dart' as globals;
+import 'package:shared_preferences/shared_preferences.dart';
 
 _goBack(BuildContext context) {
   Navigator.pop(context);
@@ -141,7 +142,7 @@ class LoadDataFromFireStoreState extends State<LoadDataFromFireStore> {
     DateTime now = DateTime.now();
     globals.temp = DateFormat('dd/MM/yyyy HH:mm:00').format(now);
 
-    void selectionChanged(CalendarSelectionDetails details) {
+    void selectionChanged(CalendarSelectionDetails details) async {
       if (_controller.view == CalendarView.month ||
           _controller.view == CalendarView.timelineMonth) {
         globals.temp = DateFormat('dd/MM/yyyy HH:mm:00').format(details.date!);
@@ -204,7 +205,8 @@ class LoadDataFromFireStoreState extends State<LoadDataFromFireStore> {
                 key: const Key("DeleteButton"),
                 backgroundColor: const Color.fromRGBO(0, 74, 173, 2),
                 onPressed: () {
-                  String appointmentSlot = globals.appointment;
+                  String? appointmentSlot = globals.appointment;
+
                   if (globals.appointment == '') {
                     showDialog(
                         context: context,
@@ -240,6 +242,7 @@ class LoadDataFromFireStoreState extends State<LoadDataFromFireStore> {
                                 TextButton(
                                     child: const Text('Delete'),
                                     onPressed: () {
+                                      globals.removePrefs(context);
                                       delete(globals.telegram);
                                       globals.appointment = '';
                                       _goBack(context);
@@ -281,6 +284,7 @@ class LoadDataFromFireStoreState extends State<LoadDataFromFireStore> {
                   key: const Key("AddButton"),
                   backgroundColor: const Color.fromRGBO(0, 74, 173, 2),
                   onPressed: () {
+                    globals.savePrefs();
                     fireStoreReference
                         .collection('RC4')
                         .doc(globals.telegram)
@@ -291,8 +295,8 @@ class LoadDataFromFireStoreState extends State<LoadDataFromFireStore> {
                     });
                     getDataFromFireStore();
                     globals.appointment = globals.start;
-                    // NotificationService().showNotification(1, "LaundroMATE",
-                    //     "Your Laundry Appointment is approaching!");
+                    NotificationService().showNotification(1, "LaundroMATE",
+                        "Your Laundry Appointment is approaching!");
                   },
                   child: const Icon(Icons.add)),
               const SizedBox(

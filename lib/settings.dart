@@ -159,6 +159,8 @@ class Settings extends StatelessWidget {
                         TextButton(
                           child: const Text('Yes'),
                           onPressed: () {
+                            globals.removePrefs(context);
+                            globals.removeProfile(context);
                             fireStoreReference
                                 .collection('RC4')
                                 .doc(globals.telegram)
