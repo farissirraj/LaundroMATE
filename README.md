@@ -11,13 +11,15 @@ LaundroMATE is a mobile application developed for NUS Hall/RC students to book l
 
 ## Milestone 3 README
 
-The Google Docs to our Miletstone 3 README can be found [here](https://docs.google.com/document/d/1UvWgbvZJrvr7OgFkEpoJYlME680VpJQaarKV4n4jvM4/edit)
+The Google Docs to our Miletstone 3 README can be found [here](https://docs.google.com/document/d/1bl6aKhpQo_gsQnBGfqgG2hLxFHPuje3ikXiz2TelCY8/edit?usp=sharing)
 
 ## Testing LaundroMATE
 
 If you are keen to test our application, you can pull the code from the main branch and run it using an approriate IDE running Flutter.
 
 Alternatively, you can download the appropriate .apk file for your device [here](https://drive.google.com/drive/folders/1Sf0KhrTttBw32EmMQZSjWeoPUxToDaK8?usp=sharing)
+
+As of now, sample data is only populated in the last week of July 2022 i.e 24th July 2022 and 30th July 2022.
 
 ## Tech Stack
   - Flutter 
