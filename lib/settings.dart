@@ -16,6 +16,7 @@ class Settings extends StatelessWidget {
   Widget build(BuildContext context) {
     void changeHandle(String newHandle) {
       globals.telegram = newHandle;
+      globals.saveProfile();
     }
 
     void resetPref(context) async {
@@ -59,6 +60,7 @@ class Settings extends StatelessWidget {
                           child: const Text('Yes'),
                           onPressed: () {
                             globals.name = _nameController.text;
+                            globals.changeName();
                             Navigator.pop(context);
                           },
                         ),
@@ -102,6 +104,7 @@ class Settings extends StatelessWidget {
                         TextButton(
                           child: const Text('Yes'),
                           onPressed: () {
+                            globals.changeTele();
                             fireStoreReference
                                 .collection('RC4')
                                 .doc(globals.telegram)

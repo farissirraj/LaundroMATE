@@ -33,6 +33,18 @@ void removeProfile(context) async {
   await prefs.remove('end');
 }
 
+void changeName() async {
+  final prefs = await SharedPreferences.getInstance();
+  await prefs.remove('Name');
+  await prefs.setString('Name', name);
+}
+
+void changeTele() async {
+  final prefs = await SharedPreferences.getInstance();
+  await prefs.remove('Telegram');
+  await prefs.setString('Telegram', telegram);
+}
+
 //User Profile
 String name = '';
 String telegram = '';

@@ -1,115 +1,27 @@
-# laundromate
+# LaundroMATE
 
-A new Flutter project.
+This is our project submision for CP2106 taken during the summer of 2022.
 
-## Getting Started
+LaundroMATE is a mobile application developed for NUS Hall/RC students to book laundry appointments in hopes of reducing congestions at laundry rooms.
 
-This project is a starting point for a Flutter application.
+# Developers
 
-A few resources to get you started if this is your first Flutter project:
+Faris Hamid Sirraj - NUS Computer Engineering (Year 2)
+Ng Lixuan Nixon    - NUS Computer Engineering (Year 2)
 
-- [Lab: Write your first Flutter app](https://flutter.dev/docs/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://flutter.dev/docs/cookbook)
+# Milestone 3 README
 
-For help getting started with Flutter, view our
-[online documentation](https://flutter.dev/docs), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
+The Google Docs to our Miletstone 3 README can be found [here](https://docs.google.com/document/d/1UvWgbvZJrvr7OgFkEpoJYlME680VpJQaarKV4n4jvM4/edit)
 
+## Testing LaundroMATE
 
+If you are keen to test our application, you can pull the code from the main branch and run it using an approriate IDE running Flutter.
 
+Alternatively, you can download the appropriate .apk file for your device [here](https://drive.google.com/drive/folders/1Sf0KhrTttBw32EmMQZSjWeoPUxToDaK8?usp=sharing)
 
-//*/
-  /*ios
-  await Firebase.initializeApp(
-      options: FirebaseOptions(
-    apiKey: 'AIzaSyBfIkm32b_104BnWzf5UrN1y34ZJ5wRcBE',
-    appId: '1:596845297819:ios:63fd08299b2e8d350a063e',
-    messagingSenderId: '596845297819',
-    projectId: 'laundromate-2e111',
-    storageBucket: 'laundromate-2e111.appspot.com',
-    iosClientId:
-        '596845297819-qlp7mf8aoglmpocoqoa4h94ae011njog.apps.googleusercontent.com',
-    iosBundleId: 'com.example.laundromate',
-  ));
-  */
-
-  /* android
-  await Firebase.initializeApp(
-      options: FirebaseOptions(
-    apiKey: 'AIzaSyAUF5vVt8-X2oypuu_h5SWcE7WRs15Y1ig',
-    appId: '1:596845297819:android:73649de62b31323d0a063e',
-    messagingSenderId: '596845297819',
-    projectId: 'laundromate-2e111',
-    storageBucket: 'laundromate-2e111.appspot.com',
-  ));
-  */
-
-
-  /*
-
-  AppBar(
-          leading: IconButton(
-            icon: const Icon(Icons.arrow_back),
-            iconSize: 20,
-            onPressed: () {
-              _goBack(context);
-            },
-          ),
-          backgroundColor: const Color.fromRGBO(0, 74, 173, 2),
-          title: Container(
-            alignment: Alignment.center,
-            padding: const EdgeInsets.symmetric(vertical: 10),
-            child: const Text(
-              'B O O K I N G',
-              style: TextStyle(
-                fontSize: 25,
-                color: Color.fromARGB(255, 255, 255, 255),
-              ),
-            ),
-          ),
-        ),
-  leading: PopupMenuButton<String>(
-              icon: const Icon(
-                Icons.settings,
-                color: Colors.black,
-              ),
-              itemBuilder: (BuildContext context) =>
-                  options.map((String choice) {
-                return PopupMenuItem<String>(
-                  value: choice,
-                  child: Text(choice),
-                );
-              }).toList(),
-              onSelected: (String value) {
-                if (value == 'Add') {
-                  final now = DateTime.now().toUtc();
-                  databaseReference
-                      .collection("appointments")
-                      .doc("appointments")
-                      .collection('all')
-                      .doc(
-                          'month${now.month}day${now.day}:${now.hour}:${now.minute}:${now.second}')
-                      .set({
-                    'Subject': 'Mastering Flutter',
-                    'StartTime': '10/06/2022 10:30',
-                    'EndTime': '10/06/2022 10:00'
-                  });
-                } else if (value == "Delete") {
-                  try {
-                    databaseReference
-                        .collection("appointments")
-                        .doc('1')
-                        .delete();
-                  } catch (e) {}
-                } else if (value == "Update") {
-                  try {
-                    databaseReference
-                        .collection("appointments")
-                        .doc('1')
-                        .update({'Subject': 'Meeting'});
-                  } catch (e) {}
-                }
-              },
-            )
-
-            */
+# Tech Stack
+  - Flutter 
+  - Dart
+  - Firebase
+  - git
+  - Syncfusion Calendar

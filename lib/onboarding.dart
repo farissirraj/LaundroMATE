@@ -31,7 +31,7 @@ class OnboardingScreen extends StatelessWidget {
                 fontSize: 40,
                 fontFamily: 'Kollektif',
                 color: Color.fromRGBO(0, 74, 173, 2)),
-          )
+          ),
         ]),
         image: Center(
           child: Image.asset('assets/icon_onboarding.png'),
@@ -77,7 +77,7 @@ class OnboardingScreen extends StatelessWidget {
           ),
           SizedBox(height: 5),
           Text(
-            'To refresh your calendar, click on the 🔄 button',
+            'To refresh your calendar, click on the 🔄 button. Please do so if the calendar does not refresh immediately.',
             textAlign: TextAlign.center,
             style: TextStyle(
                 fontSize: 20, fontFamily: 'Kollektif', color: Colors.black),

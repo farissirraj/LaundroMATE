@@ -13,6 +13,18 @@ _goBack(BuildContext context) {
   Navigator.pop(context);
 }
 
+void openTelegram() async {
+  final url = Uri.parse(
+    'https://tttttt.me/faris096',
+  );
+  if (await canLaunchUrl(url)) {
+    launchUrl(url);
+  } else {
+    // ignore: avoid_print
+    print("Can't launch $url");
+  }
+}
+
 void checkStatus() async {
   DocumentSnapshot ds = await FirebaseFirestore.instance
       .collection('LaundryRC4')
@@ -332,7 +344,7 @@ class LoadDataFromFireStoreState extends State<LoadDataFromFireStore> {
 
   //Appointment Tapped
   void calendarTapped(CalendarTapDetails details) async {
-    String tele = globals.telegram;
+    //String tele = globals.telegram;
     if (details.targetElement == CalendarElement.appointment ||
         details.targetElement == CalendarElement.agenda) {
       showDialog(
@@ -346,7 +358,7 @@ class LoadDataFromFireStoreState extends State<LoadDataFromFireStore> {
               actions: <Widget>[
                 TextButton(
                   onPressed: () {
-                    launchUrl(Uri.parse("https://t.me/$tele"));
+                    openTelegram();
                     _goBack(context);
                   },
                   child: const Text('Message'),
