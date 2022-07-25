@@ -6,8 +6,8 @@ LaundroMATE is a mobile application developed for NUS Hall/RC students to book l
 
 # Developers
 
-Faris Hamid Sirraj - NUS Computer Engineering (Year 2)
-Ng Lixuan Nixon    - NUS Computer Engineering (Year 2)
+- Faris Hamid Sirraj - NUS Computer Engineering (Year 2)
+- Ng Lixuan Nixon    - NUS Computer Engineering (Year 2)
 
 # Milestone 3 README
 
