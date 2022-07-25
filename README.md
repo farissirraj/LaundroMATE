@@ -1,4 +1,4 @@
-# LaundroMATE
+## LaundroMATE
 
 This is our project submision for CP2106 taken during the summer of 2022.
 
@@ -13,7 +13,7 @@ LaundroMATE is a mobile application developed for NUS Hall/RC students to book l
 
 The Google Docs to our Miletstone 3 README can be found [here](https://docs.google.com/document/d/1UvWgbvZJrvr7OgFkEpoJYlME680VpJQaarKV4n4jvM4/edit)
 
-## Testing LaundroMATE
+# Testing LaundroMATE
 
 If you are keen to test our application, you can pull the code from the main branch and run it using an approriate IDE running Flutter.
 
