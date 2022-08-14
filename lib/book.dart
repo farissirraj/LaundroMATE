@@ -82,11 +82,11 @@ class LoadDataFromFireStore extends StatefulWidget {
   const LoadDataFromFireStore({Key? key}) : super(key: key);
 
   @override
-  LoadDataFromFireStoreState createState() => LoadDataFromFireStoreState();
+  LoadDataFromFS createState() => LoadDataFromFS();
 }
 
-class LoadDataFromFireStoreState extends State<LoadDataFromFireStore> {
-  final List<Color> _colorCollection = <Color>[];
+class LoadDataFromFS extends State<LoadDataFromFireStore> {
+  final List<Color> _colorPalette = <Color>[];
   MeetingDataSource? events;
   final fireStoreReference = FirebaseFirestore.instance;
   bool isInitialLoaded = false;
@@ -109,8 +109,8 @@ class LoadDataFromFireStoreState extends State<LoadDataFromFireStore> {
           }
 
           final Random random = Random();
-          Meeting app = Meeting.fromFireBaseSnapShotData(
-              element, _colorCollection[random.nextInt(9)]);
+          Meeting app =
+              Meeting.fromFBSnap(element, _colorPalette[random.nextInt(9)]);
           setState(() {
             events!.appointments!.add(app);
             events!.notifyListeners(CalendarDataSourceAction.add, [app]);
@@ -121,8 +121,8 @@ class LoadDataFromFireStoreState extends State<LoadDataFromFireStore> {
           }
 
           final Random random = Random();
-          Meeting app = Meeting.fromFireBaseSnapShotData(
-              element, _colorCollection[random.nextInt(9)]);
+          Meeting app =
+              Meeting.fromFBSnap(element, _colorPalette[random.nextInt(9)]);
           setState(() {
             int index = events!.appointments!
                 .indexWhere((app) => app.key == element.doc.id);
@@ -163,7 +163,7 @@ class LoadDataFromFireStoreState extends State<LoadDataFromFireStore> {
             from:
                 DateFormat('dd/MM/yyyy HH:mm:ss').parse(e.data()['StartTime']),
             to: DateFormat('dd/MM/yyyy HH:mm:ss').parse(e.data()['EndTime']),
-            background: _colorCollection[random.nextInt(9)],
+            background: _colorPalette[random.nextInt(9)],
             isAllDay: false,
             key: e.id))
         .toList();
@@ -383,16 +383,10 @@ class LoadDataFromFireStoreState extends State<LoadDataFromFireStore> {
   }
 
   void _initializeEventColor() {
-    _colorCollection.add(const Color(0xFF0F8644));
-    _colorCollection.add(const Color(0xFF8B1FA9));
-    _colorCollection.add(const Color(0xFFD20100));
-    _colorCollection.add(const Color(0xFFFC571D));
-    _colorCollection.add(const Color(0xFF36B37B));
-    _colorCollection.add(const Color(0xFF01A1EF));
-    _colorCollection.add(const Color(0xFF3D4FB5));
-    _colorCollection.add(const Color(0xFFE47C73));
-    _colorCollection.add(const Color(0xFF636363));
-    _colorCollection.add(const Color(0xFF0A8043));
+    _colorPalette.add(const Color.fromARGB(255, 31, 99, 62));
+    _colorPalette.add(const Color.fromARGB(255, 190, 94, 216));
+    _colorPalette.add(const Color.fromARGB(255, 154, 33, 33));
+    _colorPalette.add(const Color.fromARGB(255, 221, 135, 103));
   }
 }
 
@@ -402,28 +396,8 @@ class MeetingDataSource extends CalendarDataSource {
   }
 
   @override
-  DateTime getStartTime(int index) {
-    return appointments![index].from;
-  }
-
-  @override
-  DateTime getEndTime(int index) {
-    return appointments![index].to;
-  }
-
-  @override
   bool isAllDay(int index) {
     return appointments![index].isAllDay;
-  }
-
-  @override
-  String getSubject(int index) {
-    return appointments![index].eventName;
-  }
-
-  @override
-  Color getColor(int index) {
-    return appointments![index].background;
   }
 }
 
@@ -443,7 +417,7 @@ class Meeting {
       this.isAllDay,
       this.key});
 
-  static Meeting fromFireBaseSnapShotData(dynamic element, Color color) {
+  static Meeting fromFBSnap(dynamic element, Color color) {
     return Meeting(
         eventName: element.doc.data()!['Subject'],
         from: DateFormat('dd/MM/yyyy HH:mm:ss')
